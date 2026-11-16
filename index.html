@@ -25,7 +25,7 @@
 <section class="panel no-print"><h2>บันทึกและส่งออก</h2><div class="actions"><button id="saveTrip" class="btn green">💾 บันทึกเที่ยวนี้</button><button id="csv" class="btn">ส่งออก CSV</button><button id="json" class="btn">สำรอง JSON</button><button id="importBtn" class="btn">นำเข้า JSON</button><button id="printBtn" class="btn primary">📄 ดูรายงาน A4 / PDF</button></div><input id="importFile" type="file" accept="application/json,.json" hidden><p class="hint">ข้อมูลและพิกัด GPS เก็บอยู่ในเบราว์เซอร์เครื่องนี้ ไม่ได้ส่งขึ้น GitHub หรือเซิร์ฟเวอร์ ควรสำรอง JSON เป็นระยะ โดยเฉพาะก่อนล้างข้อมูล Safari</p></section>
 <section class="panel no-print" id="savedPanel"><h2>ประวัติเที่ยวที่บันทึก</h2><div id="saved"></div></section>
 
-<section class="panel no-print" id="reportTools"><h2>รายงานการเดินทาง A4 แนวตั้ง</h2><p class="hint">ดูหน้ารายงานด้านล่างได้ทันที กด “อัปเดตรายงาน” หลังแก้จุดเดินทาง; ต้องมีพิกัด GPS อย่างน้อย 2 จุดจึงจะแสดงเส้นทางบนแผนที่ได้</p><div class="actions"><button id="refreshReport" class="btn primary">🔄 อัปเดตรายงาน</button><button id="routeReport" class="btn">🛣️ คำนวณเส้นทางตามถนน</button><button id="downloadReport" class="btn green">🖨️ พิมพ์ / บันทึก PDF A4</button></div><div class="grid" style="margin-top:13px"><div class="field"><label>แนบรูปให้จุดเดินทาง</label><select id="photoPoint"></select></div><div class="field"><label>เลือกรูปจากกล้องหรือคลังภาพ</label><input id="photoFile" type="file" accept="image/*" multiple></div></div><div id="reportStatus" class="hint" style="margin-top:8px" aria-live="polite"></div></section>
+<section class="panel no-print" id="reportTools"><h2>รายงานการเดินทาง A4 แนวตั้ง</h2><p class="hint">แผนที่ในรายงานเป็นภาพนิ่ง ไม่ต้องเลื่อนหรือซูม กด “อัปเดตรายงาน” หลังแก้จุดเดินทาง; ต้องมีพิกัด GPS อย่างน้อย 2 จุดจึงจะแสดงเส้นทางบนแผนที่ได้</p><div class="actions"><button id="refreshReport" class="btn primary">🔄 อัปเดตรายงาน</button><button id="routeReport" class="btn">🛣️ คำนวณเส้นทางตามถนน</button><button id="downloadReport" class="btn green">🖨️ พิมพ์ / บันทึก PDF A4</button></div><div class="grid" style="margin-top:13px"><div class="field"><label>แนบรูปให้จุดเดินทาง</label><select id="photoPoint"></select></div><div class="field"><label>เลือกรูปจากกล้องหรือคลังภาพ</label><input id="photoFile" type="file" accept="image/*" multiple></div></div><div id="reportStatus" class="hint" style="margin-top:8px" aria-live="polite"></div></section>
 <section id="printReport" class="report-page" aria-label="รายงานขนาด A4 แนวตั้ง"><div class="report-top"><div><strong>Q TRIP LOG GPS</strong><small>TRAVEL ROUTE REPORT · A4 PORTRAIT</small></div><div class="report-badge">บันทึกการเดินทาง</div></div><h2 id="rTitle">รายงานการเดินทาง</h2><div id="rSub" class="report-sub"></div><div id="reportMap" role="img" aria-label="แผนที่เส้นทาง"><div class="map-placeholder">📍 แผนที่จะแสดงเมื่อบันทึกพิกัด GPS อย่างน้อย 2 จุด</div></div><div id="mapCredit" class="report-map-credit">แผนที่ © OpenStreetMap contributors · เส้นทางคำนวณเป็นเส้นทางประมาณการ ไม่ใช่ GPS ที่ติดตามตลอดทาง</div><div id="rStats" class="report-stats"></div><h3>ลำดับจุดเดินทาง</h3><div id="rPoints" class="report-points"></div><h3 id="photosHeading">ภาพประกอบการเดินทาง</h3><div id="rPhotos" class="report-photos"></div><div class="report-foot">Q Trip Log GPS · ระยะทางและความเร็วสรุปจากเลขไมล์รถ (หากกรอกข้อมูลครบ) · แผนที่เป็นเส้นทางประมาณการ</div></section>
 </main><footer>ความเร็วเฉลี่ยคำนวณจากเลขไมล์รถและเวลา ไม่ใช่ GPS วัดความเร็วแบบเรียลไทม์ · GPS ใช้เพื่อระบุพิกัดเท่านั้น · ใช้งานขณะรถจอดเท่านั้น</footer>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoT4vfgc+gA6r0=" crossorigin="anonymous">
@@ -96,7 +96,7 @@ $('printBtn').onclick=()=>{document.getElementById('refreshReport').click();docu
 // Optional route-report module; original trip data keys and JSON backup format remain unchanged.
 (()=>{'use strict';
 const $=id=>document.getElementById(id),key='q-trip-log-v1',picsKey='q-trip-log-report-pictures-v1';
-let map,markers,routeLayer,track=[],routePointsSignature='',photos={};
+let track=[],routePointsSignature='',photos={},mapRenderToken=0,mapReady=Promise.resolve(false),lastGpsPoints=[];
 try{photos=JSON.parse(localStorage.getItem(picsKey)||'{}')}catch(e){photos={}}
 const read=()=>{try{return JSON.parse(localStorage.getItem(key)||'null')}catch(e){return null}};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -122,18 +122,58 @@ $('photosHeading').style.display='';
 const gps=mapPoints(ps),signature=gps.map(p=>p.id+':'+p.lat+','+p.lon).join('|');if(signature!==routePointsSignature){track=[];routePointsSignature=signature;}
 renderMap(gps);
 }
-function renderMap(points){const holder=$('reportMap');if(!window.L){holder.innerHTML='<div class="map-placeholder">โหลดแผนที่ไม่สำเร็จ กรุณาเชื่อมต่ออินเทอร์เน็ตและรีเฟรชหน้า</div>';return;}
-if(!map){holder.innerHTML='';map=L.map(holder,{scrollWheelZoom:false,zoomControl:true});L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);markers=L.layerGroup().addTo(map);}
-markers.clearLayers();if(routeLayer){map.removeLayer(routeLayer);routeLayer=null;}
-const line=track.length>1?track:points.map(p=>coords(p));
-points.forEach((p,i)=>L.circleMarker(coords(p),{radius:9,color:'#fff',weight:2,fillColor:i===0?'#168451':i===points.length-1?'#c13e43':'#156ca9',fillOpacity:1}).bindPopup(esc(p.name||'จุดที่ '+(i+1))).addTo(markers));
-if(line.length>1){routeLayer=L.polyline(line,{color:'#1674ba',weight:5,opacity:.87,dashArray:track.length?'':'7 7'}).addTo(map);map.fitBounds(routeLayer.getBounds().pad(.14),{animate:false});}else if(points.length===1)map.setView(coords(points[0]),11);else map.setView([13.75,100.5],6);
-setTimeout(()=>map.invalidateSize(),140);
-status(points.length<2?'บันทึกพิกัด GPS อย่างน้อย 2 จุดเพื่อแสดงเส้นทาง':track.length?'เส้นสีน้ำเงินคือเส้นทางตามถนนที่บริการคำนวณให้ (ไม่ใช่เส้นที่รถวิ่งจริง)':'เส้นประคือเส้นตรงระหว่างจุด กด “คำนวณเส้นทางตามถนน” เพื่อแสดงแนวถนนประมาณการ');
+// A fixed, non-interactive map: real OSM tiles with SVG route/markers. No Leaflet size or drag issues.
+function mercator(lat,lon){const clamped=Math.max(-85.05112878,Math.min(85.05112878,lat));const phi=clamped*Math.PI/180;return {x:(lon+180)/360,y:(1-Math.log(Math.tan(phi)+1/Math.cos(phi))/Math.PI)/2};}
+function renderMap(points){
+ lastGpsPoints=points;
+ const holder=$('reportMap'),width=Math.max(260,holder.clientWidth||680),height=Math.max(220,holder.clientHeight||360);
+ const token=++mapRenderToken;
+ if(points.length<2){holder.innerHTML='<div class="map-placeholder">📍 บันทึกพิกัด GPS อย่างน้อย 2 จุดเพื่อสร้างแผนที่สรุปการเดินทาง</div>';mapReady=Promise.resolve(false);status('ต้องมีพิกัด GPS อย่างน้อย 2 จุด');return;}
+ const line=track.length>1?track:points.map(p=>coords(p));
+ const all=[...line,...points.map(p=>coords(p))].filter(p=>p&&Number.isFinite(p[0])&&Number.isFinite(p[1]));
+ const projected=all.map(([lat,lon])=>mercator(lat,lon));
+ const xs=projected.map(p=>p.x),ys=projected.map(p=>p.y);
+ const minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
+ const marginX=Math.min(70,width*.16),marginY=Math.min(65,height*.19);
+ const dx=Math.max(maxX-minX,.0000004),dy=Math.max(maxY-minY,.0000004);
+ const scale=Math.min((width-2*marginX)/dx,(height-2*marginY)/dy);
+ const zoom=Math.max(2,Math.min(16,Math.floor(Math.log2(scale/256))));
+ const world=256*2**zoom,centerX=(minX+maxX)*.5*world,centerY=(minY+maxY)*.5*world;
+ const pix=([lat,lon])=>{const p=mercator(lat,lon);return [(p.x*world-centerX+width/2),(p.y*world-centerY+height/2)];};
+ const minTileX=Math.floor((centerX-width/2)/256),maxTileX=Math.floor((centerX+width/2)/256);
+ const minTileY=Math.floor((centerY-height/2)/256),maxTileY=Math.floor((centerY+height/2)/256);
+ const root=document.createElement('div');root.className='static-map';root.style.cssText='position:relative;width:100%;height:100%;overflow:hidden;background:#e5edf2;isolation:isolate';
+ const promises=[];const n=2**zoom;
+ for(let ty=minTileY;ty<=maxTileY;ty++)for(let tx=minTileX;tx<=maxTileX;tx++){
+  if(ty<0||ty>=n)continue;
+  const img=document.createElement('img');img.alt='';img.decoding='async';img.loading='eager';img.crossOrigin='anonymous';
+  img.style.cssText=`position:absolute;left:${tx*256-centerX+width/2}px;top:${ty*256-centerY+height/2}px;width:256px;height:256px;max-width:none;pointer-events:none;`;
+  const promise=new Promise(resolve=>{img.onload=()=>resolve(true);img.onerror=()=>resolve(false);});promises.push(promise);
+  img.src=`https://tile.openstreetmap.org/${zoom}/${((tx%n)+n)%n}/${ty}.png`;root.appendChild(img);
+ }
+ const xmlns='http://www.w3.org/2000/svg',svg=document.createElementNS(xmlns,'svg');
+ svg.setAttribute('viewBox',`0 0 ${width} ${height}`);svg.setAttribute('width','100%');svg.setAttribute('height','100%');
+ svg.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden';
+ function make(tag,attrs){const e=document.createElementNS(xmlns,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,String(v)));svg.appendChild(e);return e;}
+ const path=line.map((p,i)=>{const [x,y]=pix(p);return `${i?'L':'M'}${x.toFixed(2)} ${y.toFixed(2)}`;}).join(' ');
+ make('path',{d:path,fill:'none',stroke:'#ffffff','stroke-width':8,'stroke-linejoin':'round','stroke-linecap':'round',opacity:.92});
+ make('path',{d:path,fill:'none',stroke:'#126cbb','stroke-width':4.5,'stroke-linejoin':'round','stroke-linecap':'round',...(track.length?{}:{'stroke-dasharray':'8 6'})});
+ points.forEach((p,i)=>{const [x,y]=pix(coords(p));const c=i===0?'#168451':i===points.length-1?'#c13e43':'#156ca9';
+  make('circle',{cx:x,cy:y,r:13,fill:c,stroke:'#fff','stroke-width':3});
+  const label=make('text',{x,y:y+4,'font-size':12,'font-weight':800,'text-anchor':'middle',fill:'#fff'});label.textContent=i+1;
+ });
+ root.appendChild(svg);
+ const credit=document.createElement('div');credit.textContent='© OpenStreetMap contributors';credit.style.cssText='position:absolute;right:5px;bottom:4px;background:#ffffffd9;color:#42566a;padding:2px 5px;border-radius:3px;font:9px system-ui;';root.appendChild(credit);
+ holder.replaceChildren(root);
+ mapReady=Promise.all(promises).then(results=>{if(token!==mapRenderToken)return false;const ok=results.length>0&&results.every(Boolean);status(ok?(track.length?'แผนที่ภาพนิ่งพร้อมแล้ว · เส้นทางตามถนนเป็นเส้นทางประมาณการ':'แผนที่ภาพนิ่งพร้อมแล้ว · เส้นประเชื่อมตำแหน่ง GPS (กดคำนวณเส้นทางตามถนนได้)'):'แผนที่บางส่วนโหลดไม่สำเร็จ ตรวจสอบอินเทอร์เน็ตแล้วกดอัปเดตรายงาน');return ok;});
+ status('กำลังโหลดภาพแผนที่ให้ครบก่อนพิมพ์…');
 }
+async function printA4(){refresh();const button=$('downloadReport');button.disabled=true;button.textContent='กำลังเตรียมแผนที่…';
+ try{const ok=await mapReady;if(!ok&&lastGpsPoints.length>=2){alert('ภาพแผนที่ยังโหลดไม่ครบ กรุณาตรวจสอบอินเทอร์เน็ตและกดพิมพ์อีกครั้ง');return;}window.print();}
+ finally{button.disabled=false;button.textContent='🖨️ พิมพ์ / บันทึก PDF A4';}}
 $('refreshReport').onclick=refresh;
-$('printBtn').addEventListener('click',()=>setTimeout(()=>map?.invalidateSize(),300));
-$('downloadReport').onclick=()=>{refresh();setTimeout(()=>window.print(),350)};
+$('printBtn').addEventListener('click',()=>setTimeout(refresh,150));
+$('downloadReport').onclick=printA4;
 $('routeReport').onclick=async()=>{refresh();let t=read(),ps=mapPoints(t?.points||[]);if(ps.length<2){status('ต้องมีจุดที่บันทึก GPS อย่างน้อย 2 จุด');return;}
 const b=$('routeReport');b.disabled=true;b.textContent='กำลังคำนวณเส้นทาง…';try{
 let chunks=[];for(let i=1;i<ps.length;i++){const a=ps[i-1],c=ps[i];const url=`https://router.project-osrm.org/route/v1/driving/${a.lon},${a.lat};${c.lon},${c.lat}?overview=full&geometries=geojson`;
@@ -143,7 +183,7 @@ track=chunks.flatMap((part,i)=>i?part.slice(1):part);renderMap(ps);
 $('photoFile').onchange=async e=>{const id=$('photoPoint').value;if(!id)return;const originals=[...e.target.files];for(const f of originals.slice(0,6)){
 try{const img=await createImageBitmap(f),ratio=Math.min(1,950/img.width,950/img.height),can=document.createElement('canvas');can.width=Math.max(1,Math.round(img.width*ratio));can.height=Math.max(1,Math.round(img.height*ratio));can.getContext('2d').drawImage(img,0,0,can.width,can.height);(photos[id]??=[]).push(can.toDataURL('image/jpeg',.65));}catch(err){status('ไม่สามารถอ่านรูป '+f.name);}}
 try{localStorage.setItem(picsKey,JSON.stringify(photos));status('แนบรูปสำเร็จ รูปเก็บใน Safari เครื่องนี้ แยกจากไฟล์สำรอง JSON หลัก')}catch(err){(photos[id]||[]).splice(-originals.length);status('พื้นที่ Safari ไม่เพียงพอสำหรับรูป กรุณาลดจำนวนรูป')};e.target.value='';refresh();};
-window.addEventListener('beforeprint',refresh);refresh();
+window.addEventListener('resize',()=>{if($('reportMap').offsetWidth)refresh();});refresh();
 })();
 </script>
 </body></html>
