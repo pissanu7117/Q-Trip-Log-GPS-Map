@@ -4,6 +4,9 @@
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#143a65"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Q Trip Log">
 <title>Q Trip Log GPS | บันทึกการเดินทาง</title>
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
 <style>
 :root{font-family:system-ui,-apple-system,"Noto Sans Thai",sans-serif;color:#1d2c3e;background:#f0f4f8;font-size:15px}*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button{cursor:pointer}header{background:linear-gradient(125deg,#12385f,#1c699b);color:white;padding:22px 16px 25px}header .wrap{max-width:900px;margin:auto}h1{margin:0;font-size:1.55rem}header p{margin:5px 0 0;opacity:.85}.container{max-width:900px;margin:-14px auto 35px;padding:0 12px}.panel{background:#fff;border:1px solid #dce5ef;border-radius:15px;padding:17px;margin-bottom:14px;box-shadow:0 3px 12px #1d37510d}h2{font-size:1.07rem;margin:0 0 13px;display:flex;justify-content:space-between;align-items:center}.hint{font-size:.82rem;color:#607184;line-height:1.55}.field{display:flex;flex-direction:column;gap:5px}.field label{font-size:.84rem;color:#435670;font-weight:650}input,select{border:1px solid #cbd7e5;border-radius:9px;padding:11px 10px;width:100%;min-width:0;background:white;color:#1b293b}input:focus{outline:2px solid #89b8ec;outline-offset:0}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.actions{display:flex;flex-wrap:wrap;gap:9px}.btn{border:0;border-radius:10px;padding:11px 14px;font-weight:700;background:#e6edf5;color:#204568}.btn.primary{background:#146a9f;color:#fff}.btn.green{background:#26784b;color:#fff}.btn.red{background:#fff0f0;color:#a92d3b}.btn.small{font-size:.82rem;padding:7px 10px}.point{border:1px solid #d4e2ef;border-radius:12px;margin-bottom:12px;padding:13px;background:#fbfdff}.gpsbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px;padding:10px;background:#eef7f4;border-radius:10px}.gpsstatus{font-size:.8rem;color:#2d5c4e;line-height:1.5;overflow-wrap:anywhere;flex:1 1 190px}.gpsbar a{color:#106a98;font-size:.83rem}.pointhead{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.pointhead strong{font-size:.95rem}.pointhead .meta{font-size:.75rem;color:#58738d}.point-actions{display:flex;gap:5px;flex-wrap:wrap}.muted{color:#62768c}.statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.stat{padding:13px;border-radius:11px;background:#eef5fb}.stat .value{font-size:1.45rem;font-weight:800;color:#123d67;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}.stat .name{font-size:.79rem;color:#52708a}.interval{border-bottom:1px solid #dfe8ef;padding:10px 0}.interval:last-child{border:0}.interval .nums{font-size:.9rem;color:#41607e;margin-top:5px}.banner{padding:11px 12px;border-radius:10px;background:#fff6dc;color:#795519;margin:12px 0;white-space:pre-line}.saved{display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e4eaf1;padding:12px 0;gap:9px}.saved:first-child{border-top:0}.saved-title{font-weight:700}.saved small{display:block;color:#63788c}.warning{color:#a13c2d}.empty{padding:15px 0;color:#718298;text-align:center}footer{font-size:.78rem;color:#62778d;text-align:center;padding:5px 15px 25px}@media(max-width:550px){.grid.three{grid-template-columns:repeat(2,minmax(0,1fr))}.container{padding:0 9px}.panel{padding:13px}.stat .value{font-size:1.25rem}.point{padding:10px}.field.wide{grid-column:1/-1}}
 @media print{header,.actions,.no-print,button,#savedPanel,footer{display:none!important}.container{margin:0;max-width:none}body{background:#fff}.panel,.point{box-shadow:none;break-inside:avoid}.stat{background:#fff;border:1px solid #dde5ed}input{border:0;padding:3px 0}h1{color:black}}
@@ -105,7 +108,7 @@ const mins=(a,b)=>a&&b?(new Date(b)-new Date(a))/60000:null;
 const duration=n=>n===null||!Number.isFinite(n)||n<0?'—':Math.floor(Math.round(n)/60)+' ชม. '+(Math.round(n)%60)+' นาที';
 const status=message=>{$('reportStatus').textContent=message};
 const coords=p=>Number.isFinite(Number(p.lat))&&Number.isFinite(Number(p.lon))&&p.lat!=null&&p.lon!=null?[Number(p.lat),Number(p.lon)]:null;
-const mapPoints=ps=>ps.filter(p=>coords(p));
+const mapPoints=ps=>ps.map((p,i)=>({...p,pointNumber:i+1,pointRole:i===0?'start':i===ps.length-1?'end':'middle'})).filter(p=>coords(p));
 function refresh(){const t=read();if(!t||!Array.isArray(t.points))return;const ps=t.points;
 $('rTitle').textContent=t.name||'รายงานการเดินทาง';$('rSub').textContent=[t.vehicle&&'รถ / หมายเหตุ: '+t.vehicle,ps[0]?.departure&&'ออกเดินทาง: '+fmt(ps[0].departure),ps.at(-1)?.arrival&&'ถึงปลายทาง: '+fmt(ps.at(-1).arrival)].filter(Boolean).join('  ·  ');
 const dist=ps[0]?.odo!==''&&ps.at(-1)?.odo!==''?Number(ps.at(-1).odo)-Number(ps[0].odo):NaN;
@@ -156,11 +159,13 @@ function renderMap(points){
  svg.style.cssText='position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:hidden';
  function make(tag,attrs){const e=document.createElementNS(xmlns,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,String(v)));svg.appendChild(e);return e;}
  const path=line.map((p,i)=>{const [x,y]=pix(p);return `${i?'L':'M'}${x.toFixed(2)} ${y.toFixed(2)}`;}).join(' ');
- make('path',{d:path,fill:'none',stroke:'#ffffff','stroke-width':8,'stroke-linejoin':'round','stroke-linecap':'round',opacity:.92});
- make('path',{d:path,fill:'none',stroke:'#126cbb','stroke-width':4.5,'stroke-linejoin':'round','stroke-linecap':'round',...(track.length?{}:{'stroke-dasharray':'8 6'})});
- points.forEach((p,i)=>{const [x,y]=pix(coords(p));const c=i===0?'#168451':i===points.length-1?'#c13e43':'#156ca9';
-  make('circle',{cx:x,cy:y,r:13,fill:c,stroke:'#fff','stroke-width':3});
-  const label=make('text',{x,y:y+4,'font-size':12,'font-weight':800,'text-anchor':'middle',fill:'#fff'});label.textContent=i+1;
+  // A4 and screen use the same compact style: clear road line + tiny numbered stops.
+ make('path',{d:path,fill:'none',stroke:'#ffffff','stroke-width':6,'stroke-linejoin':'round','stroke-linecap':'round',opacity:.94});
+ make('path',{d:path,fill:'none',stroke:'#126cbb','stroke-width':3.2,'stroke-linejoin':'round','stroke-linecap':'round',...(track.length?{}:{'stroke-dasharray':'7 5'})});
+ points.forEach(p=>{const [x,y]=pix(coords(p));const c=p.pointRole==='start'?'#168451':p.pointRole==='end'?'#c13e43':'#156ca9';
+  const number=String(p.pointNumber);const r=number.length>1?7:6.4;
+  make('circle',{cx:x,cy:y,r,fill:c,stroke:'#fff','stroke-width':1.5});
+  const label=make('text',{x,y:y+(number.length>1?2.3:2.7),'font-size':number.length>1?7.3:8.5,'font-weight':800,'text-anchor':'middle',fill:'#fff','font-family':'system-ui, sans-serif'});label.textContent=number;
  });
  root.appendChild(svg);
  const credit=document.createElement('div');credit.textContent='© OpenStreetMap contributors';credit.style.cssText='position:absolute;right:5px;bottom:4px;background:#ffffffd9;color:#42566a;padding:2px 5px;border-radius:3px;font:9px system-ui;';root.appendChild(credit);
