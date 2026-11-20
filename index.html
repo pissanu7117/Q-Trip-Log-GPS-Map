@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#143a65"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Q Trip Log">
-<title>Q Trip Log GPS V1.17 | บันทึกการเดินทาง</title>
+<title>Q Trip Log GPS V1.18 | บันทึกการเดินทาง</title>
 <!-- Updated: GPS repeat taps refresh time; start/end point controls and iPhone datetime layout -->
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -70,7 +70,7 @@
 
 #reportMap{cursor:zoom-in}.map-view[hidden]{display:none!important}.map-view{position:fixed;inset:0;z-index:6500;background:#fff;display:flex;flex-direction:column}.map-head{padding:calc(env(safe-area-inset-top) + 10px) 12px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid #dce5ef}.map-head strong{color:#143a65}.map-hint{padding:8px 12px;margin:0;font-size:12px;color:#5b7085}.map-zoom{flex:1;min-height:0;background:#e9f0f6}.map-foot{display:flex;gap:7px;align-items:center;padding:10px 12px calc(env(safe-area-inset-bottom) + 10px)}.map-foot select{flex:1;width:auto;min-width:0}.q-marker{border:2px solid white;border-radius:50%;background:#176ca6;color:#fff;text-align:center;line-height:23px;font:bold 12px system-ui;box-shadow:0 1px 5px #0005}.q-marker.start{background:#168451}.q-marker.end{background:#c13e43}@media print{.map-view,#expandMap{display:none!important}}
 
-/* V1.17: four equal action buttons (two columns, two rows). */
+/* V1.18: four equal action buttons (two columns, two rows). */
 .wizard-nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;margin-top:16px}
 .wizard-nav .btn{display:flex;align-items:center;justify-content:center;text-align:center;min-width:0;width:100%;min-height:60px;padding:10px 7px;line-height:1.3;white-space:normal;font-size:clamp(13px,3.4vw,16px);border:1px solid transparent;border-radius:12px}
 .wizard-nav .q-prev{background:#e6edf5;color:#31516e;border-color:#d2dfeb}
@@ -90,10 +90,22 @@
 .q-save-result.warning{background:#fff6df;border-color:#f0d18b;color:#815914}
 .q-save-result.pending{background:#edf5fd;border-color:#9ec4ed;color:#17547e}
 .wtab.gps-ok{background:#e7f7ed;border-color:#69bd8a;color:#18633e}.wtab.gps-missing{background:#fff4db;border-color:#e8bc67;color:#805611}.wtab.gps-pending{background:#e8f2ff;border-color:#83afe3;color:#215c9b}.wtab.active{outline:2px solid #166fa9;outline-offset:1px}.wtab.active.gps-ok{background:#176d49;color:white}.wtab.active.gps-missing{background:#915f17;color:white}.wizard-status{font-weight:700}
+
+/* V1.18: editable report map scale and route stroke, kept outside printed page. */
+.q-map-controls{margin:12px 0;padding:13px;border:1px solid #d5e2ee;background:#f5f9fd;border-radius:12px}
+.q-map-control-head{font-weight:750;color:#244967;margin-bottom:9px}
+.q-map-control-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:9px 0}
+.q-map-control-row label{font-weight:650;font-size:.84rem;min-width:112px;color:#395976}
+.q-map-control-row .btn{min-height:42px;min-width:43px;padding:8px 10px}
+.q-map-control-row input[type=range]{flex:1 1 100px;max-width:260px;padding:0;height:35px;accent-color:#176da8}
+.q-map-reading{font-weight:800;min-width:62px;text-align:center;color:#185e92;font-variant-numeric:tabular-nums}
+.q-map-note{font-size:.78rem;line-height:1.55;color:#63798e}
+@media(max-width:550px){.q-map-control-row label{flex-basis:100%}.q-map-control-row input[type=range]{min-width:85px}}
+@media print{.q-map-controls{display:none!important}}
 </style>
 </head>
 <body>
-<header><div class="wrap"><h1>🚚 Q TRIP LOG GPS <span style="font-size:.53em;font-weight:650;opacity:.9;white-space:nowrap">V1.17</span></h1><p>บันทึกเป็นฟอร์มทีละจุด · GPS · เวลา · ระยะทาง · ความเร็วเฉลี่ย</p></div></header>
+<header><div class="wrap"><h1>🚚 Q TRIP LOG GPS <span style="font-size:.53em;font-weight:650;opacity:.9;white-space:nowrap">V1.18</span></h1><p>บันทึกเป็นฟอร์มทีละจุด · GPS · เวลา · ระยะทาง · ความเร็วเฉลี่ย</p></div></header>
 <main class="container">
 <section class="panel"><h2>ข้อมูลเที่ยวเดินทาง</h2><div class="grid"><div class="field"><label for="tripName">ชื่อเที่ยว / งาน</label><input id="tripName" placeholder="เช่น ศรีราชา → สมุทรสาคร"></div><div class="field"><label for="vehicle">ทะเบียนรถ / หมายเหตุ</label><input id="vehicle" placeholder="เช่น 71-7117"></div></div><p class="hint">บันทึกทีละจุดเหมือนแบบฟอร์ม เลขไมล์จุดเริ่มและจุดระหว่างทางต้องกรอกก่อนกดถัดไป ส่วนจุดสุดท้ายเว้นว่างได้ และเลขไมล์ต้องไม่น้อยกว่าจุดก่อนหน้า (เลขไมล์เท่ากันได้) กดย้อนกลับเพื่อแก้ไขได้เสมอ เวลาและพิกัด GPS ต้องอนุญาตให้ Safari ใช้ตำแหน่ง</p></section>
 <section class="panel" id="wizardPanel"><h2>ฟอร์มบันทึกการเดินทาง <span id="pointCount" class="hint"></span></h2>
@@ -105,7 +117,13 @@
 <section class="panel no-print"><h2>บันทึกและส่งออก</h2><div class="actions"><button id="saveTrip" class="btn green">💾 บันทึกเที่ยวนี้</button><button id="csv" class="btn">ส่งออก CSV</button><button id="json" class="btn">สำรอง JSON</button><button id="importBtn" class="btn">นำเข้า JSON</button><button id="printBtn" class="btn primary">📄 ดูรายงาน A4 / PDF</button></div><input id="importFile" type="file" accept="application/json,.json" hidden><p class="hint">ข้อมูลและพิกัด GPS เก็บอยู่ในเบราว์เซอร์เครื่องนี้ ไม่ได้ส่งขึ้น GitHub หรือเซิร์ฟเวอร์ ควรสำรอง JSON เป็นระยะ โดยเฉพาะก่อนล้างข้อมูล Safari</p></section>
 <section class="panel no-print" id="savedPanel"><h2>ประวัติเที่ยวที่บันทึก</h2><div id="saved"></div></section>
 
-<section class="panel no-print" id="reportTools"><h2>รายงานการเดินทาง A4 แนวตั้ง</h2><p class="hint">กด “อัปเดตรายงาน” หลังแก้จุดเดินทาง; ต้องมีพิกัด GPS อย่างน้อย 2 จุดจึงจะแสดงเส้นทางบนแผนที่ได้</p><div class="actions"><button id="expandMap" hidden type="button" aria-hidden="true"></button><button id="refreshReport" class="btn primary">🔄 อัปเดตรายงาน</button><button id="routeReport" class="btn">🛣️ คำนวณเส้นทางตามถนน</button><button id="editRoute" hidden type="button" aria-hidden="true"></button><button id="downloadReport" class="btn green">🖨️ พิมพ์ A4</button><button id="shareImage" class="btn primary" type="button">🖼️ แชร์ / บันทึกภาพ</button><button id="sharePDF" class="btn green" type="button">📄 แชร์ / บันทึก PDF</button></div><div class="grid" style="margin-top:13px"><div class="field"><label>แนบรูปให้จุดเดินทาง</label><select id="photoPoint"></select></div><div class="field"><label>เลือกรูปจากกล้องหรือคลังภาพ</label><input id="photoFile" type="file" accept="image/*" multiple></div></div><div id="reportStatus" class="hint" style="margin-top:8px" aria-live="polite"></div></section>
+<section class="panel no-print" id="reportTools"><h2>รายงานการเดินทาง A4 แนวตั้ง</h2><p class="hint">กด “อัปเดตรายงาน” หลังแก้จุดเดินทาง; ต้องมีพิกัด GPS อย่างน้อย 2 จุดจึงจะแสดงเส้นทางบนแผนที่ได้</p><div class="actions"><button id="expandMap" hidden type="button" aria-hidden="true"></button><button id="refreshReport" class="btn primary">🔄 อัปเดตรายงาน</button><button id="routeReport" class="btn">🛣️ คำนวณเส้นทางตามถนน</button><button id="editRoute" hidden type="button" aria-hidden="true"></button><button id="downloadReport" class="btn green">🖨️ พิมพ์ A4</button><button id="shareImage" class="btn primary" type="button">🖼️ แชร์ / บันทึกภาพ</button><button id="sharePDF" class="btn green" type="button">📄 แชร์ / บันทึก PDF</button></div><div class="q-map-controls" aria-label="ตั้งค่าการแสดงแผนที่และเส้นทาง">
+<div class="q-map-control-head">🗺️ ปรับแผนที่ในรายงาน A4</div>
+<div class="q-map-control-row"><label for="qMapZoom">🔎 ซูมแผนที่</label><button type="button" class="btn" id="qZoomOut" aria-label="ซูมออก">−</button><input id="qMapZoom" type="range" min="75" max="250" step="5" value="100" aria-label="ขนาดซูมแผนที่"><button type="button" class="btn primary" id="qZoomIn" aria-label="ซูมเข้า">＋</button><output id="qZoomValue" class="q-map-reading" for="qMapZoom">100%</output></div>
+<div class="q-map-control-row"><label for="qLineWidth">🔵 ความหนาเส้น</label><button type="button" class="btn" id="qLineLess" aria-label="ลดความหนาเส้น">−</button><input id="qLineWidth" type="range" min="1" max="12" step="1" value="4" aria-label="ความหนาของเส้นทาง"><button type="button" class="btn primary" id="qLineMore" aria-label="เพิ่มความหนาเส้น">＋</button><output id="qLineValue" class="q-map-reading" for="qLineWidth">4 px</output></div>
+<div class="q-map-control-row"><button type="button" class="btn green" id="qFitRoute">🎯 พอดีกรอบ / เห็นทุกจุด</button><button type="button" class="btn" id="qResetMapStyle">↶ คืนค่าความหนาเส้น</button></div>
+<div class="q-map-note">ค่าเริ่มต้นแผนที่จะขยายให้เส้นทางอยู่ในกรอบมากที่สุด ปรับซูมเพิ่มแล้วบางจุดอาจถูกตัดออกจากกรอบ กด “พอดีกรอบ” เพื่อกลับมาเห็นครบทุกจุด · ค่าที่ตั้งใช้กับภาพและ PDF ด้วย</div>
+</div><div class="grid" style="margin-top:13px"><div class="field"><label>แนบรูปให้จุดเดินทาง</label><select id="photoPoint"></select></div><div class="field"><label>เลือกรูปจากกล้องหรือคลังภาพ</label><input id="photoFile" type="file" accept="image/*" multiple></div></div><div id="reportStatus" class="hint" style="margin-top:8px" aria-live="polite"></div></section>
 <section id="printReport" class="report-page" aria-label="รายงานขนาด A4 แนวตั้ง"><div class="report-top"><div><strong>Q TRIP LOG GPS</strong><small>TRAVEL ROUTE REPORT · A4 PORTRAIT</small></div><div class="report-badge">บันทึกการเดินทาง</div></div><h2 id="rTitle">รายงานการเดินทาง</h2><div id="rSub" class="report-sub"></div><div id="reportMap" role="img" aria-label="แผนที่เส้นทาง"><div class="map-placeholder">📍 แผนที่จะแสดงเมื่อบันทึกพิกัด GPS อย่างน้อย 2 จุด</div></div><div id="gpsPointStatus" class="report-map-credit" style="margin-top:8px;line-height:1.6"></div><div id="mapCredit" class="report-map-credit">แผนที่ © OpenStreetMap contributors · เส้นทางคำนวณเป็นเส้นทางประมาณการ ไม่ใช่ GPS ที่ติดตามตลอดทาง</div><div id="rStats" class="report-stats"></div><h3>ลำดับจุดเดินทาง</h3><div id="rPoints" class="report-points"></div><h3 id="photosHeading">ภาพประกอบการเดินทาง</h3><div id="rPhotos" class="report-photos"></div><div class="report-foot">Q Trip Log GPS · ระยะทางและความเร็วสรุปจากเลขไมล์รถ (หากกรอกข้อมูลครบ) · แผนที่เป็นเส้นทางประมาณการ</div></section>
 </main>
 <div id="routeModal" class="route-modal no-print" hidden role="dialog" aria-modal="true" aria-label="แก้ไขเส้นทางบนแผนที่">
@@ -310,6 +328,20 @@ $('printBtn').onclick=()=>{document.getElementById('refreshReport').click();docu
 (()=>{'use strict';
 const $=id=>document.getElementById(id),key='q-trip-log-v1',picsKey='q-trip-log-report-pictures-v1';
 let track=[],routePointsSignature='',photos={},mapRenderToken=0,mapReady=Promise.resolve(false),lastGpsPoints=[];
+const mapStyleKey='q-trip-log-map-style-v118';
+let mapStyle={zoom:100,line:4};
+try{const stored=JSON.parse(localStorage.getItem(mapStyleKey)||'null');if(stored){if(Number.isFinite(+stored.zoom))mapStyle.zoom=Math.max(75,Math.min(250,Math.round(+stored.zoom/5)*5));if(Number.isFinite(+stored.line))mapStyle.line=Math.max(1,Math.min(12,Math.round(+stored.line)));}}catch(e){}
+function updateMapStyleControls(){$('qMapZoom').value=mapStyle.zoom;$('qLineWidth').value=mapStyle.line;$('qZoomValue').textContent=mapStyle.zoom+'%';$('qLineValue').textContent=mapStyle.line+' px';}
+function changeMapStyle(zoom,line){mapStyle.zoom=Math.max(75,Math.min(250,Math.round(zoom/5)*5));mapStyle.line=Math.max(1,Math.min(12,Math.round(line)));try{localStorage.setItem(mapStyleKey,JSON.stringify(mapStyle))}catch(e){}updateMapStyleControls();renderMap(lastGpsPoints);}
+updateMapStyleControls();
+$('qMapZoom').addEventListener('input',e=>changeMapStyle(+e.target.value,mapStyle.line));
+$('qLineWidth').addEventListener('input',e=>changeMapStyle(mapStyle.zoom,+e.target.value));
+$('qZoomOut').onclick=()=>changeMapStyle(mapStyle.zoom-10,mapStyle.line);
+$('qZoomIn').onclick=()=>changeMapStyle(mapStyle.zoom+10,mapStyle.line);
+$('qLineLess').onclick=()=>changeMapStyle(mapStyle.zoom,mapStyle.line-1);
+$('qLineMore').onclick=()=>changeMapStyle(mapStyle.zoom,mapStyle.line+1);
+$('qFitRoute').onclick=()=>changeMapStyle(100,mapStyle.line);
+$('qResetMapStyle').onclick=()=>changeMapStyle(mapStyle.zoom,4);
 try{photos=JSON.parse(localStorage.getItem(picsKey)||'{}')}catch(e){photos={}}
 const read=()=>{try{return JSON.parse(localStorage.getItem(key)||'null')}catch(e){return null}};
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -362,22 +394,26 @@ function renderMap(points){
  const projected=all.map(([lat,lon])=>mercator(lat,lon));
  const xs=projected.map(p=>p.x),ys=projected.map(p=>p.y);
  const minX=Math.min(...xs),maxX=Math.max(...xs),minY=Math.min(...ys),maxY=Math.max(...ys);
- const marginX=Math.min(70,width*.16),marginY=Math.min(65,height*.19);
+ // Continuous fit: no integer-zoom rounding gap. Start at 6% padding and preserve the exact aspect ratio.
+ const marginX=Math.max(18,width*.06),marginY=Math.max(18,height*.065);
  const dx=Math.max(maxX-minX,.0000004),dy=Math.max(maxY-minY,.0000004);
- const scale=Math.min((width-2*marginX)/dx,(height-2*marginY)/dy);
- const zoom=Math.max(2,Math.min(16,Math.floor(Math.log2(scale/256))));
- const world=256*2**zoom,centerX=(minX+maxX)*.5*world,centerY=(minY+maxY)*.5*world;
+ const fitWorld=Math.min((width-2*marginX)/dx,(height-2*marginY)/dy);
+ const world=Math.max(256*2**2,Math.min(256*2**18,fitWorld*mapStyle.zoom/100));
+ // Background tiles use an integer level, but render at a fractional pixel size for smooth zoom.
+ const tileZoom=Math.max(2,Math.min(18,Math.floor(Math.log2(world/256))));
+ const tileWorld=256*2**tileZoom,ratio=world/tileWorld,tileSize=256*ratio;
+ const centerX=(minX+maxX)*.5*world,centerY=(minY+maxY)*.5*world;
  const pix=([lat,lon])=>{const p=mercator(lat,lon);return [(p.x*world-centerX+width/2),(p.y*world-centerY+height/2)];};
- const minTileX=Math.floor((centerX-width/2)/256),maxTileX=Math.floor((centerX+width/2)/256);
- const minTileY=Math.floor((centerY-height/2)/256),maxTileY=Math.floor((centerY+height/2)/256);
+ const minTileX=Math.floor((centerX-width/2)/tileSize),maxTileX=Math.floor((centerX+width/2)/tileSize);
+ const minTileY=Math.floor((centerY-height/2)/tileSize),maxTileY=Math.floor((centerY+height/2)/tileSize);
  const root=document.createElement('div');root.className='static-map';root.style.cssText='position:relative;width:100%;height:100%;overflow:hidden;background:#e5edf2;isolation:isolate';
- const promises=[];const n=2**zoom;
+ const promises=[];const n=2**tileZoom;
  for(let ty=minTileY;ty<=maxTileY;ty++)for(let tx=minTileX;tx<=maxTileX;tx++){
   if(ty<0||ty>=n)continue;
   const img=document.createElement('img');img.alt='';img.decoding='async';img.loading='eager';img.crossOrigin='anonymous';
-  img.style.cssText=`position:absolute;left:${tx*256-centerX+width/2}px;top:${ty*256-centerY+height/2}px;width:256px;height:256px;max-width:none;pointer-events:none;`;
+  img.style.cssText=`position:absolute;left:${tx*tileSize-centerX+width/2}px;top:${ty*tileSize-centerY+height/2}px;width:${tileSize+0.3}px;height:${tileSize+0.3}px;max-width:none;pointer-events:none;`;
   const promise=new Promise(resolve=>{img.onload=()=>resolve(true);img.onerror=()=>resolve(false);});promises.push(promise);
-  img.src=`https://tile.openstreetmap.org/${zoom}/${((tx%n)+n)%n}/${ty}.png`;root.appendChild(img);
+  img.src=`https://tile.openstreetmap.org/${tileZoom}/${((tx%n)+n)%n}/${ty}.png`;root.appendChild(img);
  }
  const xmlns='http://www.w3.org/2000/svg',svg=document.createElementNS(xmlns,'svg');
  svg.setAttribute('viewBox',`0 0 ${width} ${height}`);svg.setAttribute('width','100%');svg.setAttribute('height','100%');
@@ -385,8 +421,8 @@ function renderMap(points){
  function make(tag,attrs){const e=document.createElementNS(xmlns,tag);Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,String(v)));svg.appendChild(e);return e;}
  const path=line.map((p,i)=>{const [x,y]=pix(p);return `${i?'L':'M'}${x.toFixed(2)} ${y.toFixed(2)}`;}).join(' ');
   // A4 and screen use the same compact style: clear road line + tiny numbered stops.
- make('path',{d:path,fill:'none',stroke:'#ffffff','stroke-width':6,'stroke-linejoin':'round','stroke-linecap':'round',opacity:.94});
- make('path',{d:path,fill:'none',stroke:'#126cbb','stroke-width':3.2,'stroke-linejoin':'round','stroke-linecap':'round',...(track.length?{}:{'stroke-dasharray':'7 5'})});
+ make('path',{d:path,fill:'none',stroke:'#ffffff','stroke-width':mapStyle.line+3,'stroke-linejoin':'round','stroke-linecap':'round',opacity:.94});
+ make('path',{d:path,fill:'none',stroke:'#126cbb','stroke-width':mapStyle.line,'stroke-linejoin':'round','stroke-linecap':'round',...(track.length?{}:{'stroke-dasharray':'7 5'})});
  const usedLocations=new Map();
   points.forEach(p=>{const [realX,realY]=pix(coords(p));let x=realX,y=realY;
    const coordinateKey=Number(p.lat).toFixed(6)+','+Number(p.lon).toFixed(6);
@@ -514,12 +550,12 @@ async function getReportCanvas(){
   if(!canvas.width||!canvas.height)throw Error('สร้างภาพรายงานไม่สำเร็จ');
   return canvas;
 }
-const filename=ext=>`Q_TRIP_LOG_${new Date().toISOString().slice(0,10)}_V1.16.${ext}`;
+const filename=ext=>`Q_TRIP_LOG_${new Date().toISOString().slice(0,10)}_V1.18.${ext}`;
 function downloadFile(file){const url=URL.createObjectURL(file);const a=document.createElement('a');a.href=url;a.download=file.name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);}
 function shareFile(file){
   // Called immediately from the second direct tap, preserving Safari's user gesture.
   if(navigator.share&&navigator.canShare?.({files:[file]})){
-    return navigator.share({files:[file],title:'Q TRIP LOG GPS V1.16'}).then(()=> 'shared').catch(e=>{
+    return navigator.share({files:[file],title:'Q TRIP LOG GPS V1.18'}).then(()=> 'shared').catch(e=>{
       if(e.name==='AbortError')return 'cancelled';downloadFile(file);return 'downloaded';
     });
   }
