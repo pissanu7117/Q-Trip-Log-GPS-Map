@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#143a65"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Q Trip Log">
-<title>Q Trip Log GPS V1.16 | บันทึกการเดินทาง</title>
+<title>Q Trip Log GPS V1.17 | บันทึกการเดินทาง</title>
 <!-- Updated: GPS repeat taps refresh time; start/end point controls and iPhone datetime layout -->
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -70,7 +70,7 @@
 
 #reportMap{cursor:zoom-in}.map-view[hidden]{display:none!important}.map-view{position:fixed;inset:0;z-index:6500;background:#fff;display:flex;flex-direction:column}.map-head{padding:calc(env(safe-area-inset-top) + 10px) 12px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid #dce5ef}.map-head strong{color:#143a65}.map-hint{padding:8px 12px;margin:0;font-size:12px;color:#5b7085}.map-zoom{flex:1;min-height:0;background:#e9f0f6}.map-foot{display:flex;gap:7px;align-items:center;padding:10px 12px calc(env(safe-area-inset-bottom) + 10px)}.map-foot select{flex:1;width:auto;min-width:0}.q-marker{border:2px solid white;border-radius:50%;background:#176ca6;color:#fff;text-align:center;line-height:23px;font:bold 12px system-ui;box-shadow:0 1px 5px #0005}.q-marker.start{background:#168451}.q-marker.end{background:#c13e43}@media print{.map-view,#expandMap{display:none!important}}
 
-/* V1.16: four equal action buttons (two columns, two rows). */
+/* V1.17: four equal action buttons (two columns, two rows). */
 .wizard-nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;margin-top:16px}
 .wizard-nav .btn{display:flex;align-items:center;justify-content:center;text-align:center;min-width:0;width:100%;min-height:60px;padding:10px 7px;line-height:1.3;white-space:normal;font-size:clamp(13px,3.4vw,16px);border:1px solid transparent;border-radius:12px}
 .wizard-nav .q-prev{background:#e6edf5;color:#31516e;border-color:#d2dfeb}
@@ -84,14 +84,20 @@
 #reportMap{cursor:default!important}
 .export-busy{opacity:.6;pointer-events:none}
 @media(max-width:550px){.report-page{width:100%;max-width:100%;overflow:hidden}.wizard-nav{gap:9px!important}}
+/* Point save result: distinguish point-data saved from GPS capture. */
+.q-save-result{margin:10px 0;padding:12px;border-radius:10px;border:1px solid #cfdfeb;line-height:1.6;font-size:.87rem;white-space:pre-line}
+.q-save-result.success{background:#e8f7ee;border-color:#8bd4a5;color:#14623a}
+.q-save-result.warning{background:#fff6df;border-color:#f0d18b;color:#815914}
+.q-save-result.pending{background:#edf5fd;border-color:#9ec4ed;color:#17547e}
+.wtab.gps-ok{background:#e7f7ed;border-color:#69bd8a;color:#18633e}.wtab.gps-missing{background:#fff4db;border-color:#e8bc67;color:#805611}.wtab.gps-pending{background:#e8f2ff;border-color:#83afe3;color:#215c9b}.wtab.active{outline:2px solid #166fa9;outline-offset:1px}.wtab.active.gps-ok{background:#176d49;color:white}.wtab.active.gps-missing{background:#915f17;color:white}.wizard-status{font-weight:700}
 </style>
 </head>
 <body>
-<header><div class="wrap"><h1>🚚 Q TRIP LOG GPS <span style="font-size:.53em;font-weight:650;opacity:.9;white-space:nowrap">V1.16</span></h1><p>บันทึกเป็นฟอร์มทีละจุด · GPS · เวลา · ระยะทาง · ความเร็วเฉลี่ย</p></div></header>
+<header><div class="wrap"><h1>🚚 Q TRIP LOG GPS <span style="font-size:.53em;font-weight:650;opacity:.9;white-space:nowrap">V1.17</span></h1><p>บันทึกเป็นฟอร์มทีละจุด · GPS · เวลา · ระยะทาง · ความเร็วเฉลี่ย</p></div></header>
 <main class="container">
 <section class="panel"><h2>ข้อมูลเที่ยวเดินทาง</h2><div class="grid"><div class="field"><label for="tripName">ชื่อเที่ยว / งาน</label><input id="tripName" placeholder="เช่น ศรีราชา → สมุทรสาคร"></div><div class="field"><label for="vehicle">ทะเบียนรถ / หมายเหตุ</label><input id="vehicle" placeholder="เช่น 71-7117"></div></div><p class="hint">บันทึกทีละจุดเหมือนแบบฟอร์ม เลขไมล์จุดเริ่มและจุดระหว่างทางต้องกรอกก่อนกดถัดไป ส่วนจุดสุดท้ายเว้นว่างได้ และเลขไมล์ต้องไม่น้อยกว่าจุดก่อนหน้า (เลขไมล์เท่ากันได้) กดย้อนกลับเพื่อแก้ไขได้เสมอ เวลาและพิกัด GPS ต้องอนุญาตให้ Safari ใช้ตำแหน่ง</p></section>
 <section class="panel" id="wizardPanel"><h2>ฟอร์มบันทึกการเดินทาง <span id="pointCount" class="hint"></span></h2>
-<div id="wizardTabs" class="wizard-tabs no-print" aria-label="เลือกจุดเดินทาง"></div>
+<div id="wizardTabs" class="wizard-tabs no-print" aria-label="เลือกจุดเดินทาง"></div><p class="hint no-print" style="margin:0 0 10px">🟢 บันทึก GPS แล้ว · 🟠 บันทึกข้อมูลแล้ว แต่ยังไม่มี GPS · ⚪ ยังไม่บันทึก · 🔵 กำลังจับ GPS</p>
 <div id="points"></div>
 <div class="wizard-nav no-print"><button id="prevPoint" class="btn q-prev">← ย้อนกลับ</button><button id="nextPoint" class="btn q-next">ถัดไป →</button><button id="addPoint" class="btn q-add">＋ เพิ่มจุดระหว่างทาง</button><button id="resetTrip" class="btn q-reset">↻ เริ่มเที่ยวใหม่</button></div>
 <div id="wizExtra" class="no-print q-extra"><button id="finishPoint" class="btn green">🏁 ไปจุดสิ้นสุด</button></div></section>
@@ -126,7 +132,7 @@ const $=id=>document.getElementById(id), KEY='q-trip-log-v1', LIST='q-trip-log-s
 const now=()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16)};
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
 const fresh=()=>({id:uid(),name:'',vehicle:'',points:[{id:uid(),name:'จุดเริ่มต้น',arrival:'',departure:'',odo:''},{id:uid(),name:'จุดหมาย',arrival:'',departure:'',odo:''}]});
-let trip=load(KEY)||fresh();let saved=load(LIST)||[];let activeIndex=0;
+let trip=load(KEY)||fresh();let saved=load(LIST)||[];let activeIndex=0;const pointSaveResults=new Map();const gpsInProgress=new Set();
 function load(key){try{return JSON.parse(localStorage.getItem(key))}catch(e){return null}}
 function persist(){try{const previous=load(KEY);if(previous?.id===trip.id&&previous.routeEdit&&!trip.routeEdit){trip.routeEdit=previous.routeEdit}localStorage.setItem(KEY,JSON.stringify(trip))}catch(e){alert('ไม่สามารถบันทึกอัตโนมัติได้ กรุณาสำรอง JSON')}}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
@@ -170,17 +176,17 @@ function pointCompleted(p,i){return !!String(p.odo??'').trim()&&!odoProblem(i)&&
 function renderPoints(){
  const ps=trip.points,i=activeIndex=Math.min(activeIndex,ps.length-1),p=ps[i],first=i===0,last=i===ps.length-1;
  $('pointCount').textContent=`${ps.length} จุด · กำลังแก้จุด ${i+1}`;
- $('wizardTabs').innerHTML=ps.map((x,j)=>`<button type="button" data-tab="${j}" class="wtab ${i===j?'active':''} ${pointCompleted(x,j)?'done':''}">${x.lat!=null&&x.lon!=null?'🟢':'⚪'} ${j===0?'1 เริ่ม':j===ps.length-1?`${j+1} จบ`:`จุด ${j+1}`}</button>`).join('');
+ $('wizardTabs').innerHTML=ps.map((x,j)=>{const pending=gpsInProgress.has(x.id),hasGPS=x.lat!=null&&x.lon!=null,recorded=!!(x.arrival||x.departure||x.status==='passing'||x.status==='stopped'||x.status==='resumed');const state=pending?'gps-pending':hasGPS?'gps-ok':recorded?'gps-missing':'';const symbol=pending?'🔵':hasGPS?'🟢':recorded?'🟠':'⚪';return `<button type="button" data-tab="${j}" class="wtab ${i===j?'active':''} ${pointCompleted(x,j)?'done':''} ${state}" title="${pending?'กำลังจับ GPS':hasGPS?'มีพิกัด GPS':recorded?'บันทึกข้อมูลแล้ว แต่ไม่มี GPS':'ยังไม่บันทึก'}">${symbol} ${j===0?'1 เริ่ม':j===ps.length-1?`${j+1} จบ`:`จุด ${j+1}`}</button>`;}).join('');
  const title=first?'จุดที่ 1 — เริ่มออกเดินทาง':last?`จุดที่ ${i+1} — สิ้นสุดเดินทาง`:`จุดที่ ${i+1} — ระหว่างทาง`;
  const tKey=first?'departure':'arrival';
  const extra=first?'<div class="wizard-note">กรอกเลขไมล์เริ่มต้น กดจับ GPS + เวลา แล้วกดถัดไป</div>':last?'<div class="wizard-note">จุดสุดท้ายกรอกเวลาถึงได้เลย · เลขไมล์ปลายทางไม่บังคับกรอก</div>':`<div class="wizard-actions no-print">
-  <button data-action="passing" class="btn ${p.status==='passing'?'primary':''}" ${p.status==='stopped'?'disabled':''}>📍 บันทึกจุด</button>
+  <button data-action="passing" class="btn ${p.status==='passing'?'primary':''}" ${p.status==='stopped'?'disabled':''}>${gpsInProgress.has(p.id)?'⏳ กำลังจับ GPS':p.status==='passing'&&p.lat!=null&&p.lon!=null?'✅ บันทึกแล้ว':'📍 บันทึกจุด'}</button>
   <button data-action="stop" class="btn ${p.status==='stopped'?'red':''}" ${p.status==='stopped'||p.status==='resumed'?'disabled':''}>🅿️ จอดพัก</button>
   <button data-action="resume" class="btn ${p.status==='stopped'?'green':''}" ${p.status!=='stopped'?'disabled':''}>🚚 เดินทางต่อ</button>
  </div><div class="wizard-feedback" id="pointFeedback">${p.status==='stopped'?'กำลังจอดพัก · เมื่อจะออกให้กด เดินทางต่อ':p.status==='resumed'?'ออกเดินทางต่อแล้ว · จอดพัก '+duration(minutes(p.arrival,p.departure)):p.status==='passing'?'บันทึกจุดผ่าน · ไม่นับเป็นการจอดพัก':'บันทึกเวลาถึงและเลขไมล์ แล้วเลือกการทำงานด้านบน'}</div>`;
  $('points').innerHTML=`<div class="wizard-point point" data-i="${i}"><div class="wizard-top"><strong>${title}</strong><div class="wizard-title-actions"><span class="wizard-status">${pointCompleted(p,i)?'✓ มีข้อมูลแล้ว':'ยังไม่ครบ'}</span>${!first&&!last?'<button type="button" class="btn red wizard-delete no-print" data-action="deletePoint">🗑️ ลบจุดนี้</button>':''}</div></div>
  <div class="grid">${field('ชื่อสถานที่','name','text',p.name,'เช่น บ้าน / ด่านบางพระ','wide')}${field(last?'เลขไมล์รถ (กม.) — ไม่บังคับ':'เลขไมล์รถ (กม.) *','odo','number',p.odo,last?'เว้นว่างได้':'เช่น 385720','wide')}${field(first?'เวลาออกเดินทาง':last?'เวลาถึงปลายทาง':'เวลาถึงจุดนี้',tKey,'datetime-local',p[tKey])}${!first&&!last?field('เวลาออกจากจุดนี้','departure','datetime-local',p.departure):'<div class="field"><label>ประเภทจุด</label><div style="padding:13px;background:#edf3f9;border-radius:9px">'+(first?'เริ่มเดินทาง':'จุดสิ้นสุด')+'</div></div>'}</div><div id="odoValidation" class="odo-error" role="alert" aria-live="polite" hidden></div>
- <div class="gpsbar no-print"><button class="btn green" data-action="${first?'gpsDeparture':'gpsArrival'}">📍 จับพิกัดปัจจุบัน + เวลา</button><div class="gpsstatus">${esc(gpsInfo(p))}</div></div>${extra}</div>`;
+ <div class="gpsbar no-print"><button class="btn green" data-action="${first?'gpsDeparture':'gpsArrival'}">📍 จับพิกัดปัจจุบัน + เวลา</button><div class="gpsstatus">${esc(gpsInfo(p))}</div></div>${extra}${pointSaveResults.has(p.id)?`<div class="q-save-result ${pointSaveResults.get(p.id).type}" role="status" aria-live="polite">${esc(pointSaveResults.get(p.id).message)}</div>`:""}</div>`;
  $('prevPoint').disabled=i===0;
  $('nextPoint').textContent=last?'📊 จบเที่ยว / ดูสรุป':i===ps.length-2?'🏁 ถัดไป: จุดสิ้นสุด':'ถัดไป →';
  $('finishPoint').hidden=first||last;
@@ -212,9 +218,16 @@ $('points').addEventListener('click',e=>{const b=e.target.closest('[data-action]
  }
  if(a==='gpsArrival'||a==='gpsDeparture'){captureGPS(i,a==='gpsArrival'?'arrival':'departure',b);return}
  if(a==='passing'){
-  if(!p.arrival){p.arrival=now();}p.departure=p.arrival;p.status='passing';
+  if(gpsInProgress.has(p.id))return;
+  const timestamp=now();p.arrival=timestamp;p.departure=timestamp;p.status='passing';
+  persist();renderPoints();updateStats();
+  savePointGPS(p.id,'passing');
+  return;
  }else if(a==='stop'){
+  if(gpsInProgress.has(p.id))return;
   if(!p.arrival)p.arrival=now();p.departure='';p.status='stopped';
+  persist();renderPoints();updateStats();
+  savePointGPS(p.id,'stop');return;
  }else if(a==='resume'){
   if(p.status!=='stopped')return;p.departure=now();p.status='resumed';
  }
@@ -232,31 +245,63 @@ $('nextPoint').onclick=()=>{
 };
 $('finishPoint').onclick=()=>{if(checkOdo(activeIndex)&&checkForwardTo(trip.points.length-1))setActive(trip.points.length-1)};
 
+function gpsErrorText(err){return err?.code===1?'ไม่ได้รับอนุญาตให้เข้าถึงตำแหน่ง (ตรวจสิทธิ์ Location ใน Safari)':err?.code===2?'โทรศัพท์หาพิกัดไม่พบ':err?.code===3?'จับพิกัดเกินเวลาที่กำหนด':(err?.message||'เกิดข้อผิดพลาดในการจับ GPS')}
+async function savePointGPS(pointId,kind){
+ const p=trip.points.find(x=>x.id===pointId);
+ if(!p)return;
+ gpsInProgress.add(pointId);
+ const verb=kind==='stop'?'เวลาถึงจุดจอด':'เวลาถึงและเวลาออก';
+ pointSaveResults.set(pointId,{type:'pending',message:'⏳ บันทึก'+verb+'ในเครื่องแล้ว · กำลังจับพิกัด GPS…'});
+ renderPoints();
+ try{
+  const pos=await gpsPosition();
+  const current=trip.points.find(x=>x.id===pointId);
+  if(!current||current!==p)return;
+  current.lat=pos.coords.latitude;current.lon=pos.coords.longitude;
+  current.accuracy=pos.coords.accuracy;current.gpsAt=new Date(pos.timestamp).toISOString();
+  persist();
+  pointSaveResults.set(pointId,{type:'success',message:'✅ บันทึก'+verb+'และ GPS สำเร็จ\n'+(kind==='stop'?'เริ่มจอดเมื่อ ':'เวลาถึง / เวลาออก: ')+(current.arrival||'—').replace('T',' ')+'\nพิกัด '+Number(current.lat).toFixed(6)+', '+Number(current.lon).toFixed(6)});
+ }catch(err){
+  if(!trip.points.some(x=>x===p))return;
+  const oldGps=p.lat!=null&&p.lon!=null;
+  pointSaveResults.set(pointId,{type:'warning',message:'⚠️ บันทึก'+verb+'ในเครื่องแล้ว แต่จับ GPS ไม่สำเร็จ\n'+gpsErrorText(err)+(oldGps?'\nพิกัดเดิมยังคงอยู่ (ไม่ได้อัปเดต)':'\nจุดนี้ยังไม่มีพิกัด GPS')+'\nกด “จับพิกัดปัจจุบัน + เวลา” เพื่อลองใหม่'});
+ }finally{
+  gpsInProgress.delete(pointId);
+  if(trip.points.some(x=>x===p))renderPoints();
+ }
+}
 function gpsPosition(){return new Promise((resolve,reject)=>{
 if(!window.isSecureContext){reject(Error('ต้องเปิดผ่าน HTTPS (GitHub Pages) เพื่อใช้ GPS'));return}
 if(!navigator.geolocation){reject(Error('เบราว์เซอร์นี้ไม่รองรับการอ่านตำแหน่ง'));return}
 navigator.geolocation.getCurrentPosition(resolve,reject,{enableHighAccuracy:true,timeout:20000,maximumAge:0});
 })}
 async function captureGPS(index,mode,button){
-const prior=trip.points[index]?.[mode];if(prior&&!confirm('มีเวลาบันทึกอยู่แล้ว ('+prior.replace('T',' ')+')\nต้องการเปลี่ยนเป็นเวลาปัจจุบันใช่ไหม?'))return;
-const pressedAt=new Date(); // Record the time of this tap, not a possibly stale GPS fix.
-if(button){button.disabled=true;button.textContent='กำลังจับ GPS…'}
-try{const pos=await gpsPosition();const p=trip.points[index];if(!p)throw Error('ไม่พบจุดที่เลือก');
-const captured=pressedAt;const local=new Date(captured.getTime()-captured.getTimezoneOffset()*60000).toISOString().slice(0,16);
-p.lat=pos.coords.latitude;p.lon=pos.coords.longitude;p.accuracy=pos.coords.accuracy;p.gpsAt=new Date(pos.timestamp).toISOString();p[mode]=local;
-renderPoints();updateStats();persist();
-alert('บันทึกพิกัดและ'+(mode==='arrival'?'เวลาถึง':'เวลาออก')+'แล้ว\n'+gpsInfo(p)+'\nกรุณาตรวจสอบเลขไมล์รถด้วย');
-}catch(err){let msg=err.code===1?'ไม่ได้รับอนุญาตให้เข้าถึงตำแหน่ง กรุณาเปิดสิทธิ์ Location สำหรับ Safari':err.code===2?'ไม่สามารถหาตำแหน่งได้ ลองเปิดบริการตำแหน่งหรือย้ายไปจุดที่รับสัญญาณได้':err.code===3?'ค้นหาตำแหน่งนานเกินไป ลองอีกครั้ง':err.message;alert('จับ GPS ไม่สำเร็จ: '+msg)}finally{if(button&&button.isConnected){button.disabled=false;button.textContent=mode==='arrival'?'📍 GPS + เวลาถึง':'📍 GPS + เวลาออก'}}
+ const point=trip.points[index];if(!point||gpsInProgress.has(point.id))return;
+ const tappedAt=new Date();const id=point.id;
+ gpsInProgress.add(id);
+ pointSaveResults.set(id,{type:'pending',message:'⏳ กำลังจับ GPS… ข้อมูลเวลาที่บันทึกไว้จะไม่ถูกเปลี่ยน'});
+ renderPoints();
+ try{
+  const pos=await gpsPosition();const p=trip.points.find(x=>x.id===id);
+  if(p!==point)return;
+  const local=new Date(tappedAt.getTime()-tappedAt.getTimezoneOffset()*60000).toISOString().slice(0,16);
+  p.lat=pos.coords.latitude;p.lon=pos.coords.longitude;p.accuracy=pos.coords.accuracy;p.gpsAt=new Date(pos.timestamp).toISOString();
+  if(!p[mode])p[mode]=local;
+  persist();updateStats();
+  pointSaveResults.set(id,{type:'success',message:'✅ บันทึก GPS สำเร็จ\nพิกัด '+Number(p.lat).toFixed(6)+', '+Number(p.lon).toFixed(6)+'\nเวลาที่กรอกไว้เดิมยังคงอยู่'});
+ }catch(err){
+  if(trip.points.includes(point))pointSaveResults.set(id,{type:'warning',message:'⚠️ จับ GPS ไม่สำเร็จ · '+gpsErrorText(err)+'\nข้อมูลจุดเดิมไม่ถูกลบ สามารถลองอีกครั้ง'});
+ }finally{gpsInProgress.delete(id);if(trip.points.includes(point))renderPoints();}
 }
-$('resetTrip').onclick=()=>{if(confirm('เริ่มเที่ยวใหม่? ข้อมูลที่ยังไม่ได้บันทึกเป็นประวัติจะถูกแทนที่')){trip=fresh();activeIndex=0;render()}};
+$('resetTrip').onclick=()=>{if(confirm('เริ่มเที่ยวใหม่? ข้อมูลที่ยังไม่ได้บันทึกเป็นประวัติจะถูกแทนที่')){trip=fresh();pointSaveResults.clear();gpsInProgress.clear();activeIndex=0;render()}};
 $('saveTrip').onclick=()=>{for(let i=0;i<trip.points.length;i++){if(odoProblem(i)){setActive(i);checkOdo(i);return}}const stored=load(KEY);if(stored?.id===trip.id&&stored.routeEdit)trip.routeEdit=stored.routeEdit;if(!trip.name.trim())trip.name='เที่ยว '+datefmt(trip.points[0].departure);let entry=JSON.parse(JSON.stringify(trip));entry.savedAt=new Date().toISOString();const pos=saved.findIndex(s=>s.id===entry.id);if(pos<0)saved.unshift(entry);else saved[pos]=entry;try{localStorage.setItem(LIST,JSON.stringify(saved));persist();renderSaved();alert('บันทึกเที่ยวเรียบร้อยแล้ว')}catch(e){alert('พื้นที่จัดเก็บไม่พอ กรุณาสำรอง JSON')}};
 function renderSaved(){const el=$('saved');el.innerHTML=saved.length?saved.map((s,i)=>`<div class="saved"><div><div class="saved-title">${esc(s.name||'ไม่ระบุชื่อ')}</div><small>${esc(s.vehicle||'')} · ${esc(datefmt(s.points?.[0]?.departure))} · ${s.points?.length||0} จุด</small></div><div class="actions"><button class="btn small" data-open="${i}">เปิด</button><button class="btn red small" data-delete="${i}">ลบ</button></div></div>`).join(''):'<div class="empty">ยังไม่มีประวัติที่บันทึก</div>'}
-$('saved').onclick=e=>{let b=e.target.closest('button');if(!b)return;if(b.dataset.open!==undefined){if(confirm('เปิดเที่ยวที่บันทึก? ข้อมูลเที่ยวปัจจุบันจะถูกแทนที่ (หากต้องการเก็บให้กดบันทึกก่อน)')){trip=JSON.parse(JSON.stringify(saved[Number(b.dataset.open)]));activeIndex=0;render();window.scrollTo({top:0,behavior:'smooth'})}}else if(b.dataset.delete!==undefined&&confirm('ลบเที่ยวนี้จากประวัติ?')){saved.splice(Number(b.dataset.delete),1);localStorage.setItem(LIST,JSON.stringify(saved));renderSaved()}};
+$('saved').onclick=e=>{let b=e.target.closest('button');if(!b)return;if(b.dataset.open!==undefined){if(confirm('เปิดเที่ยวที่บันทึก? ข้อมูลเที่ยวปัจจุบันจะถูกแทนที่ (หากต้องการเก็บให้กดบันทึกก่อน)')){trip=JSON.parse(JSON.stringify(saved[Number(b.dataset.open)]));pointSaveResults.clear();gpsInProgress.clear();activeIndex=0;render();window.scrollTo({top:0,behavior:'smooth'})}}else if(b.dataset.delete!==undefined&&confirm('ลบเที่ยวนี้จากประวัติ?')){saved.splice(Number(b.dataset.delete),1);localStorage.setItem(LIST,JSON.stringify(saved));renderSaved()}};
 function download(name,content,type){const blob=new Blob(['\ufeff',content],{type}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),10000)}
 const csvEscape=s=>'"'+String(s??'').replace(/"/g,'""')+'"';
 $('csv').onclick=()=>{let rows=[['ชื่อเที่ยว','ทะเบียน/หมายเหตุ','ลำดับ','ชื่อจุด','เวลาถึง','เวลาออก','เลขไมล์ กม.','ระยะช่วง กม.','เวลาเดินทางช่วง (นาที)','ความเร็วช่วง กม./ชม.','ละติจูด','ลองจิจูด','ความแม่นยำ GPS (ม.)','เวลาจับ GPS']];let c=calculations();trip.points.forEach((p,i)=>{let s=c.seg[i-1];rows.push([trip.name,trip.vehicle,i+1,p.name,p.arrival,p.departure,p.odo,s?.d??'',s?.t??'',s?.d!=null&&s?.t>0?(s.d*60/s.t).toFixed(2):'',p.lat??'',p.lon??'',p.accuracy??'',p.gpsAt??''])});download('q-trip-'+new Date().toISOString().slice(0,10)+'.csv',rows.map(r=>r.map(csvEscape).join(',')).join('\r\n'),'text/csv;charset=utf-8')};
 $('json').onclick=()=>{const stored=load(KEY);if(stored?.id===trip.id&&stored.routeEdit)trip.routeEdit=stored.routeEdit;download('q-trip-backup-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({version:2,current:trip,saved,reportPhotos:JSON.parse(localStorage.getItem('q-trip-log-report-pictures-v1')||'{}')},null,2),'application/json')};
-$('importBtn').onclick=()=>$('importFile').click();$('importFile').onchange=async e=>{let file=e.target.files[0];if(!file)return;try{let data=JSON.parse(await file.text());if(!Array.isArray(data.saved)||!data.current||!Array.isArray(data.current.points)||data.current.points.length<2)throw Error('รูปแบบไม่ถูกต้อง');if(!confirm('นำเข้าข้อมูลสำรอง? จะทับเที่ยวปัจจุบันและประวัติทั้งหมด'))return;trip=data.current;activeIndex=0;saved=data.saved;localStorage.setItem(LIST,JSON.stringify(saved));if(data.reportPhotos&&typeof data.reportPhotos==='object'){try{localStorage.setItem('q-trip-log-report-pictures-v1',JSON.stringify(data.reportPhotos))}catch(e){alert('นำเข้าข้อมูลหลักได้ แต่พื้นที่สำหรับรูปไม่เพียงพอ')}}render();alert('นำเข้าข้อมูลเรียบร้อย')}catch(err){alert('นำเข้าไม่ได้: '+err.message)}finally{e.target.value=''}};
+$('importBtn').onclick=()=>$('importFile').click();$('importFile').onchange=async e=>{let file=e.target.files[0];if(!file)return;try{let data=JSON.parse(await file.text());if(!Array.isArray(data.saved)||!data.current||!Array.isArray(data.current.points)||data.current.points.length<2)throw Error('รูปแบบไม่ถูกต้อง');if(!confirm('นำเข้าข้อมูลสำรอง? จะทับเที่ยวปัจจุบันและประวัติทั้งหมด'))return;trip=data.current;pointSaveResults.clear();gpsInProgress.clear();activeIndex=0;saved=data.saved;localStorage.setItem(LIST,JSON.stringify(saved));if(data.reportPhotos&&typeof data.reportPhotos==='object'){try{localStorage.setItem('q-trip-log-report-pictures-v1',JSON.stringify(data.reportPhotos))}catch(e){alert('นำเข้าข้อมูลหลักได้ แต่พื้นที่สำหรับรูปไม่เพียงพอ')}}render();alert('นำเข้าข้อมูลเรียบร้อย')}catch(err){alert('นำเข้าไม่ได้: '+err.message)}finally{e.target.value=''}};
 $('printBtn').onclick=()=>{document.getElementById('refreshReport').click();document.getElementById('printReport').scrollIntoView({behavior:'smooth'});};render();
 })();
 </script>
