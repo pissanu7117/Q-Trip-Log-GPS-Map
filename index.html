@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#143a65"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Q Trip Log">
-<title>Q Trip Log GPS V1.15 | บันทึกการเดินทาง</title>
+<title>Q Trip Log GPS V1.16 | บันทึกการเดินทาง</title>
 <!-- Updated: GPS repeat taps refresh time; start/end point controls and iPhone datetime layout -->
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -70,7 +70,7 @@
 
 #reportMap{cursor:zoom-in}.map-view[hidden]{display:none!important}.map-view{position:fixed;inset:0;z-index:6500;background:#fff;display:flex;flex-direction:column}.map-head{padding:calc(env(safe-area-inset-top) + 10px) 12px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid #dce5ef}.map-head strong{color:#143a65}.map-hint{padding:8px 12px;margin:0;font-size:12px;color:#5b7085}.map-zoom{flex:1;min-height:0;background:#e9f0f6}.map-foot{display:flex;gap:7px;align-items:center;padding:10px 12px calc(env(safe-area-inset-bottom) + 10px)}.map-foot select{flex:1;width:auto;min-width:0}.q-marker{border:2px solid white;border-radius:50%;background:#176ca6;color:#fff;text-align:center;line-height:23px;font:bold 12px system-ui;box-shadow:0 1px 5px #0005}.q-marker.start{background:#168451}.q-marker.end{background:#c13e43}@media print{.map-view,#expandMap{display:none!important}}
 
-/* V1.15: four equal action buttons (two columns, two rows). */
+/* V1.16: four equal action buttons (two columns, two rows). */
 .wizard-nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;margin-top:16px}
 .wizard-nav .btn{display:flex;align-items:center;justify-content:center;text-align:center;min-width:0;width:100%;min-height:60px;padding:10px 7px;line-height:1.3;white-space:normal;font-size:clamp(13px,3.4vw,16px);border:1px solid transparent;border-radius:12px}
 .wizard-nav .q-prev{background:#e6edf5;color:#31516e;border-color:#d2dfeb}
@@ -87,9 +87,9 @@
 </style>
 </head>
 <body>
-<header><div class="wrap"><h1>🚚 Q TRIP LOG GPS <span style="font-size:.53em;font-weight:650;opacity:.9;white-space:nowrap">V1.15</span></h1><p>บันทึกเป็นฟอร์มทีละจุด · GPS · เวลา · ระยะทาง · ความเร็วเฉลี่ย</p></div></header>
+<header><div class="wrap"><h1>🚚 Q TRIP LOG GPS <span style="font-size:.53em;font-weight:650;opacity:.9;white-space:nowrap">V1.16</span></h1><p>บันทึกเป็นฟอร์มทีละจุด · GPS · เวลา · ระยะทาง · ความเร็วเฉลี่ย</p></div></header>
 <main class="container">
-<section class="panel"><h2>ข้อมูลเที่ยวเดินทาง</h2><div class="grid"><div class="field"><label for="tripName">ชื่อเที่ยว / งาน</label><input id="tripName" placeholder="เช่น ศรีราชา → สมุทรสาคร"></div><div class="field"><label for="vehicle">ทะเบียนรถ / หมายเหตุ</label><input id="vehicle" placeholder="เช่น 71-7117"></div></div><p class="hint">บันทึกทีละจุดเหมือนแบบฟอร์ม ต้องกรอกเลขไมล์ก่อนกดถัดไป โดยเลขไมล์ต้องไม่น้อยกว่าจุดก่อนหน้า (เลขไมล์เท่ากันได้) กดย้อนกลับเพื่อแก้ไขได้เสมอ เวลาและพิกัด GPS ต้องอนุญาตให้ Safari ใช้ตำแหน่ง</p></section>
+<section class="panel"><h2>ข้อมูลเที่ยวเดินทาง</h2><div class="grid"><div class="field"><label for="tripName">ชื่อเที่ยว / งาน</label><input id="tripName" placeholder="เช่น ศรีราชา → สมุทรสาคร"></div><div class="field"><label for="vehicle">ทะเบียนรถ / หมายเหตุ</label><input id="vehicle" placeholder="เช่น 71-7117"></div></div><p class="hint">บันทึกทีละจุดเหมือนแบบฟอร์ม เลขไมล์จุดเริ่มและจุดระหว่างทางต้องกรอกก่อนกดถัดไป ส่วนจุดสุดท้ายเว้นว่างได้ และเลขไมล์ต้องไม่น้อยกว่าจุดก่อนหน้า (เลขไมล์เท่ากันได้) กดย้อนกลับเพื่อแก้ไขได้เสมอ เวลาและพิกัด GPS ต้องอนุญาตให้ Safari ใช้ตำแหน่ง</p></section>
 <section class="panel" id="wizardPanel"><h2>ฟอร์มบันทึกการเดินทาง <span id="pointCount" class="hint"></span></h2>
 <div id="wizardTabs" class="wizard-tabs no-print" aria-label="เลือกจุดเดินทาง"></div>
 <div id="points"></div>
@@ -100,7 +100,7 @@
 <section class="panel no-print" id="savedPanel"><h2>ประวัติเที่ยวที่บันทึก</h2><div id="saved"></div></section>
 
 <section class="panel no-print" id="reportTools"><h2>รายงานการเดินทาง A4 แนวตั้ง</h2><p class="hint">กด “อัปเดตรายงาน” หลังแก้จุดเดินทาง; ต้องมีพิกัด GPS อย่างน้อย 2 จุดจึงจะแสดงเส้นทางบนแผนที่ได้</p><div class="actions"><button id="expandMap" hidden type="button" aria-hidden="true"></button><button id="refreshReport" class="btn primary">🔄 อัปเดตรายงาน</button><button id="routeReport" class="btn">🛣️ คำนวณเส้นทางตามถนน</button><button id="editRoute" hidden type="button" aria-hidden="true"></button><button id="downloadReport" class="btn green">🖨️ พิมพ์ A4</button><button id="shareImage" class="btn primary" type="button">🖼️ แชร์ / บันทึกภาพ</button><button id="sharePDF" class="btn green" type="button">📄 แชร์ / บันทึก PDF</button></div><div class="grid" style="margin-top:13px"><div class="field"><label>แนบรูปให้จุดเดินทาง</label><select id="photoPoint"></select></div><div class="field"><label>เลือกรูปจากกล้องหรือคลังภาพ</label><input id="photoFile" type="file" accept="image/*" multiple></div></div><div id="reportStatus" class="hint" style="margin-top:8px" aria-live="polite"></div></section>
-<section id="printReport" class="report-page" aria-label="รายงานขนาด A4 แนวตั้ง"><div class="report-top"><div><strong>Q TRIP LOG GPS</strong><small>TRAVEL ROUTE REPORT · A4 PORTRAIT</small></div><div class="report-badge">บันทึกการเดินทาง</div></div><h2 id="rTitle">รายงานการเดินทาง</h2><div id="rSub" class="report-sub"></div><div id="reportMap" role="img" aria-label="แผนที่เส้นทาง"><div class="map-placeholder">📍 แผนที่จะแสดงเมื่อบันทึกพิกัด GPS อย่างน้อย 2 จุด</div></div><div id="mapCredit" class="report-map-credit">แผนที่ © OpenStreetMap contributors · เส้นทางคำนวณเป็นเส้นทางประมาณการ ไม่ใช่ GPS ที่ติดตามตลอดทาง</div><div id="rStats" class="report-stats"></div><h3>ลำดับจุดเดินทาง</h3><div id="rPoints" class="report-points"></div><h3 id="photosHeading">ภาพประกอบการเดินทาง</h3><div id="rPhotos" class="report-photos"></div><div class="report-foot">Q Trip Log GPS · ระยะทางและความเร็วสรุปจากเลขไมล์รถ (หากกรอกข้อมูลครบ) · แผนที่เป็นเส้นทางประมาณการ</div></section>
+<section id="printReport" class="report-page" aria-label="รายงานขนาด A4 แนวตั้ง"><div class="report-top"><div><strong>Q TRIP LOG GPS</strong><small>TRAVEL ROUTE REPORT · A4 PORTRAIT</small></div><div class="report-badge">บันทึกการเดินทาง</div></div><h2 id="rTitle">รายงานการเดินทาง</h2><div id="rSub" class="report-sub"></div><div id="reportMap" role="img" aria-label="แผนที่เส้นทาง"><div class="map-placeholder">📍 แผนที่จะแสดงเมื่อบันทึกพิกัด GPS อย่างน้อย 2 จุด</div></div><div id="gpsPointStatus" class="report-map-credit" style="margin-top:8px;line-height:1.6"></div><div id="mapCredit" class="report-map-credit">แผนที่ © OpenStreetMap contributors · เส้นทางคำนวณเป็นเส้นทางประมาณการ ไม่ใช่ GPS ที่ติดตามตลอดทาง</div><div id="rStats" class="report-stats"></div><h3>ลำดับจุดเดินทาง</h3><div id="rPoints" class="report-points"></div><h3 id="photosHeading">ภาพประกอบการเดินทาง</h3><div id="rPhotos" class="report-photos"></div><div class="report-foot">Q Trip Log GPS · ระยะทางและความเร็วสรุปจากเลขไมล์รถ (หากกรอกข้อมูลครบ) · แผนที่เป็นเส้นทางประมาณการ</div></section>
 </main>
 <div id="routeModal" class="route-modal no-print" hidden role="dialog" aria-modal="true" aria-label="แก้ไขเส้นทางบนแผนที่">
   <div class="route-dialog">
@@ -141,15 +141,13 @@ function setActive(index){activeIndex=Math.max(0,Math.min(trip.points.length-1,i
 // Odometer checks for navigation; allow equal readings for stops, reject blank / decreasing readings.
 function odoProblem(index){
  const ps=trip.points,p=ps[index],raw=String(p?.odo??'').trim();
- if(!raw)return 'กรุณากรอกเลขไมล์รถของจุดที่ '+(index+1)+' ก่อนดำเนินการต่อ';
+ if(!raw)return index===ps.length-1?'':'กรุณากรอกเลขไมล์รถของจุดที่ '+(index+1)+' ก่อนดำเนินการต่อ';
  const value=Number(raw);
  if(!Number.isFinite(value)||value<0)return 'กรุณากรอกเลขไมล์เป็นตัวเลขที่ถูกต้อง (0 หรือมากกว่า)';
  if(index>0){const previous=String(ps[index-1]?.odo??'').trim();
   if(previous&&Number.isFinite(Number(previous))&&value<Number(previous))return 'เลขไมล์จุดที่ '+(index+1)+' ('+num(value)+') ต้องไม่น้อยกว่าจุดที่ '+index+' ('+num(Number(previous))+')';
  }
- if(index<ps.length-1){const next=String(ps[index+1]?.odo??'').trim();
-  if(next&&Number.isFinite(Number(next))&&value>Number(next))return 'เลขไมล์จุดที่ '+(index+1)+' ต้องไม่มากกว่าจุดถัดไป ('+num(Number(next))+')';
- }
+  // Do not block editing a previous point based on a stale future odometer.
  return '';
 }
 function checkOdo(index){
@@ -172,16 +170,16 @@ function pointCompleted(p,i){return !!String(p.odo??'').trim()&&!odoProblem(i)&&
 function renderPoints(){
  const ps=trip.points,i=activeIndex=Math.min(activeIndex,ps.length-1),p=ps[i],first=i===0,last=i===ps.length-1;
  $('pointCount').textContent=`${ps.length} จุด · กำลังแก้จุด ${i+1}`;
- $('wizardTabs').innerHTML=ps.map((x,j)=>`<button type="button" data-tab="${j}" class="wtab ${i===j?'active':''} ${pointCompleted(x,j)?'done':''}">${j===0?'🚩 1 เริ่ม':j===ps.length-1?`🏁 ${j+1} จบ`:`📍 จุด ${j+1}`}</button>`).join('');
+ $('wizardTabs').innerHTML=ps.map((x,j)=>`<button type="button" data-tab="${j}" class="wtab ${i===j?'active':''} ${pointCompleted(x,j)?'done':''}">${x.lat!=null&&x.lon!=null?'🟢':'⚪'} ${j===0?'1 เริ่ม':j===ps.length-1?`${j+1} จบ`:`จุด ${j+1}`}</button>`).join('');
  const title=first?'จุดที่ 1 — เริ่มออกเดินทาง':last?`จุดที่ ${i+1} — สิ้นสุดเดินทาง`:`จุดที่ ${i+1} — ระหว่างทาง`;
  const tKey=first?'departure':'arrival';
- const extra=first?'<div class="wizard-note">กรอกเลขไมล์เริ่มต้น กดจับ GPS + เวลา แล้วกดถัดไป</div>':last?'<div class="wizard-note">จุดสุดท้ายกรอกเลขไมล์ปลายทางและเวลาถึง ไม่ต้องมีปุ่มจอดพัก</div>':`<div class="wizard-actions no-print">
+ const extra=first?'<div class="wizard-note">กรอกเลขไมล์เริ่มต้น กดจับ GPS + เวลา แล้วกดถัดไป</div>':last?'<div class="wizard-note">จุดสุดท้ายกรอกเวลาถึงได้เลย · เลขไมล์ปลายทางไม่บังคับกรอก</div>':`<div class="wizard-actions no-print">
   <button data-action="passing" class="btn ${p.status==='passing'?'primary':''}" ${p.status==='stopped'?'disabled':''}>📍 บันทึกจุด</button>
   <button data-action="stop" class="btn ${p.status==='stopped'?'red':''}" ${p.status==='stopped'||p.status==='resumed'?'disabled':''}>🅿️ จอดพัก</button>
   <button data-action="resume" class="btn ${p.status==='stopped'?'green':''}" ${p.status!=='stopped'?'disabled':''}>🚚 เดินทางต่อ</button>
  </div><div class="wizard-feedback" id="pointFeedback">${p.status==='stopped'?'กำลังจอดพัก · เมื่อจะออกให้กด เดินทางต่อ':p.status==='resumed'?'ออกเดินทางต่อแล้ว · จอดพัก '+duration(minutes(p.arrival,p.departure)):p.status==='passing'?'บันทึกจุดผ่าน · ไม่นับเป็นการจอดพัก':'บันทึกเวลาถึงและเลขไมล์ แล้วเลือกการทำงานด้านบน'}</div>`;
  $('points').innerHTML=`<div class="wizard-point point" data-i="${i}"><div class="wizard-top"><strong>${title}</strong><div class="wizard-title-actions"><span class="wizard-status">${pointCompleted(p,i)?'✓ มีข้อมูลแล้ว':'ยังไม่ครบ'}</span>${!first&&!last?'<button type="button" class="btn red wizard-delete no-print" data-action="deletePoint">🗑️ ลบจุดนี้</button>':''}</div></div>
- <div class="grid">${field('ชื่อสถานที่','name','text',p.name,'เช่น บ้าน / ด่านบางพระ','wide')}${field('เลขไมล์รถ (กม.) *','odo','number',p.odo,'เช่น 385720','wide')}${field(first?'เวลาออกเดินทาง':last?'เวลาถึงปลายทาง':'เวลาถึงจุดนี้',tKey,'datetime-local',p[tKey])}${!first&&!last?field('เวลาออกจากจุดนี้','departure','datetime-local',p.departure):'<div class="field"><label>ประเภทจุด</label><div style="padding:13px;background:#edf3f9;border-radius:9px">'+(first?'เริ่มเดินทาง':'จุดสิ้นสุด')+'</div></div>'}</div><div id="odoValidation" class="odo-error" role="alert" aria-live="polite" hidden></div>
+ <div class="grid">${field('ชื่อสถานที่','name','text',p.name,'เช่น บ้าน / ด่านบางพระ','wide')}${field(last?'เลขไมล์รถ (กม.) — ไม่บังคับ':'เลขไมล์รถ (กม.) *','odo','number',p.odo,last?'เว้นว่างได้':'เช่น 385720','wide')}${field(first?'เวลาออกเดินทาง':last?'เวลาถึงปลายทาง':'เวลาถึงจุดนี้',tKey,'datetime-local',p[tKey])}${!first&&!last?field('เวลาออกจากจุดนี้','departure','datetime-local',p.departure):'<div class="field"><label>ประเภทจุด</label><div style="padding:13px;background:#edf3f9;border-radius:9px">'+(first?'เริ่มเดินทาง':'จุดสิ้นสุด')+'</div></div>'}</div><div id="odoValidation" class="odo-error" role="alert" aria-live="polite" hidden></div>
  <div class="gpsbar no-print"><button class="btn green" data-action="${first?'gpsDeparture':'gpsArrival'}">📍 จับพิกัดปัจจุบัน + เวลา</button><div class="gpsstatus">${esc(gpsInfo(p))}</div></div>${extra}</div>`;
  $('prevPoint').disabled=i===0;
  $('nextPoint').textContent=last?'📊 จบเที่ยว / ดูสรุป':i===ps.length-2?'🏁 ถัดไป: จุดสิ้นสุด':'ถัดไป →';
@@ -229,7 +227,7 @@ $('prevPoint').onclick=()=>setActive(activeIndex-1);
 $('nextPoint').onclick=()=>{
  if(!checkOdo(activeIndex))return;
  if(activeIndex===trip.points.length-1){$('saveTrip').scrollIntoView({behavior:'smooth',block:'center'});return}
- if(activeIndex===trip.points.length-2){insertMiddle();return}
+ if(activeIndex===trip.points.length-2){setActive(trip.points.length-1);return}
  setActive(activeIndex+1);
 };
 $('finishPoint').onclick=()=>{if(checkOdo(activeIndex)&&checkForwardTo(trip.points.length-1))setActive(trip.points.length-1)};
@@ -304,7 +302,7 @@ $('photoPoint').innerHTML=ps.map((p,i)=>'<option value="'+esc(p.id)+'">'+(i+1)+'
 const attached=ps.flatMap(p=>(photos[p.id]||[]).map(src=>({name:p.name||'จุดเดินทาง',src}))).slice(0,12);
 $('rPhotos').innerHTML=attached.map(p=>'<div class="report-photo"><img src="'+p.src+'" alt="ภาพสถานที่"><div>'+esc(p.name)+'</div></div>').join('')||'<div class="hint">ยังไม่มีรูปภาพแนบ</div>';
 $('photosHeading').style.display='';
-const gps=mapPoints(ps),signature=gps.map(p=>p.id+':'+p.lat+','+p.lon).join('|');if(signature!==routePointsSignature){track=[];routePointsSignature=signature;}
+const gps=mapPoints(ps),missing=ps.map((p,i)=>coords(p)?null:i+1).filter(Boolean);$('gpsPointStatus').textContent='GPS ที่บันทึกแล้ว: '+(gps.map(p=>p.pointNumber).join(', ')||'ไม่มี')+' / '+ps.length+' จุด'+(missing.length?' · จุดที่ยังไม่มีพิกัด: '+missing.join(', '):' · ครบทุกจุด');const signature=gps.map(p=>p.id+':'+p.lat+','+p.lon).join('|');if(signature!==routePointsSignature){track=[];routePointsSignature=signature;}
 renderMap(gps);
 }
 // A fixed, non-interactive map: real OSM tiles with SVG route/markers. No Leaflet size or drag issues.
@@ -344,7 +342,13 @@ function renderMap(points){
   // A4 and screen use the same compact style: clear road line + tiny numbered stops.
  make('path',{d:path,fill:'none',stroke:'#ffffff','stroke-width':6,'stroke-linejoin':'round','stroke-linecap':'round',opacity:.94});
  make('path',{d:path,fill:'none',stroke:'#126cbb','stroke-width':3.2,'stroke-linejoin':'round','stroke-linecap':'round',...(track.length?{}:{'stroke-dasharray':'7 5'})});
- points.forEach(p=>{const [x,y]=pix(coords(p));const c=p.pointRole==='start'?'#168451':p.pointRole==='end'?'#c13e43':'#156ca9';
+ const usedLocations=new Map();
+  points.forEach(p=>{const [realX,realY]=pix(coords(p));let x=realX,y=realY;
+   const coordinateKey=Number(p.lat).toFixed(6)+','+Number(p.lon).toFixed(6);
+   const overlap=usedLocations.get(coordinateKey)||0;usedLocations.set(coordinateKey,overlap+1);
+   if(overlap){const angle=(overlap-1)*2.39996;x+=Math.cos(angle)*18;y+=Math.sin(angle)*18;
+    make('path',{d:`M${realX} ${realY} L${x} ${y}`,stroke:'#365b73','stroke-width':1,fill:'none','stroke-dasharray':'2 2'});}
+   const c=p.pointRole==='start'?'#168451':p.pointRole==='end'?'#c13e43':'#156ca9';
   const number=String(p.pointNumber);const r=number.length>1?7:6.4;
   make('circle',{cx:x,cy:y,r,fill:c,stroke:'#fff','stroke-width':1.5});
   const label=make('text',{x,y:y+(number.length>1?2.3:2.7),'font-size':number.length>1?7.3:8.5,'font-weight':800,'text-anchor':'middle',fill:'#fff','font-family':'system-ui, sans-serif'});label.textContent=number;
@@ -465,12 +469,12 @@ async function getReportCanvas(){
   if(!canvas.width||!canvas.height)throw Error('สร้างภาพรายงานไม่สำเร็จ');
   return canvas;
 }
-const filename=ext=>`Q_TRIP_LOG_${new Date().toISOString().slice(0,10)}_V1.15.${ext}`;
+const filename=ext=>`Q_TRIP_LOG_${new Date().toISOString().slice(0,10)}_V1.16.${ext}`;
 function downloadFile(file){const url=URL.createObjectURL(file);const a=document.createElement('a');a.href=url;a.download=file.name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);}
 function shareFile(file){
   // Called immediately from the second direct tap, preserving Safari's user gesture.
   if(navigator.share&&navigator.canShare?.({files:[file]})){
-    return navigator.share({files:[file],title:'Q TRIP LOG GPS V1.15'}).then(()=> 'shared').catch(e=>{
+    return navigator.share({files:[file],title:'Q TRIP LOG GPS V1.16'}).then(()=> 'shared').catch(e=>{
       if(e.name==='AbortError')return 'cancelled';downloadFile(file);return 'downloaded';
     });
   }
