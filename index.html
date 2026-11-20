@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#143a65"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Q Trip Log">
-<title>Q Trip Log GPS V1.14 | บันทึกการเดินทาง</title>
+<title>Q Trip Log GPS V1.15 | บันทึกการเดินทาง</title>
 <!-- Updated: GPS repeat taps refresh time; start/end point controls and iPhone datetime layout -->
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -69,22 +69,37 @@
 @media print{#wizardTabs,.wizard-nav,.wizard-actions,#wizExtra{display:none!important}}
 
 #reportMap{cursor:zoom-in}.map-view[hidden]{display:none!important}.map-view{position:fixed;inset:0;z-index:6500;background:#fff;display:flex;flex-direction:column}.map-head{padding:calc(env(safe-area-inset-top) + 10px) 12px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid #dce5ef}.map-head strong{color:#143a65}.map-hint{padding:8px 12px;margin:0;font-size:12px;color:#5b7085}.map-zoom{flex:1;min-height:0;background:#e9f0f6}.map-foot{display:flex;gap:7px;align-items:center;padding:10px 12px calc(env(safe-area-inset-bottom) + 10px)}.map-foot select{flex:1;width:auto;min-width:0}.q-marker{border:2px solid white;border-radius:50%;background:#176ca6;color:#fff;text-align:center;line-height:23px;font:bold 12px system-ui;box-shadow:0 1px 5px #0005}.q-marker.start{background:#168451}.q-marker.end{background:#c13e43}@media print{.map-view,#expandMap{display:none!important}}
+
+/* V1.15: four equal action buttons (two columns, two rows). */
+.wizard-nav{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important;margin-top:16px}
+.wizard-nav .btn{display:flex;align-items:center;justify-content:center;text-align:center;min-width:0;width:100%;min-height:60px;padding:10px 7px;line-height:1.3;white-space:normal;font-size:clamp(13px,3.4vw,16px);border:1px solid transparent;border-radius:12px}
+.wizard-nav .q-prev{background:#e6edf5;color:#31516e;border-color:#d2dfeb}
+.wizard-nav .q-next{background:#156da4;color:white}
+.wizard-nav .q-add{background:#dbf2e4;color:#16683e;border-color:#a6d9b9}
+.wizard-nav .q-reset{background:#fbe4e7;color:#a62e3c;border-color:#eec5cc}
+.wizard-nav .btn:disabled{opacity:.42;cursor:not-allowed}
+.q-extra{display:flex;justify-content:center;margin-top:10px}
+.q-extra .btn{width:100%;min-height:44px}
+#expandMap[hidden],#editRoute[hidden]{display:none!important}
+#reportMap{cursor:default!important}
+.export-busy{opacity:.6;pointer-events:none}
+@media(max-width:550px){.report-page{width:100%;max-width:100%;overflow:hidden}.wizard-nav{gap:9px!important}}
 </style>
 </head>
 <body>
-<header><div class="wrap"><h1>🚚 Q TRIP LOG GPS <span style="font-size:.53em;font-weight:650;opacity:.9;white-space:nowrap">V1.14</span></h1><p>บันทึกเป็นฟอร์มทีละจุด · GPS · เวลา · ระยะทาง · ความเร็วเฉลี่ย</p></div></header>
+<header><div class="wrap"><h1>🚚 Q TRIP LOG GPS <span style="font-size:.53em;font-weight:650;opacity:.9;white-space:nowrap">V1.15</span></h1><p>บันทึกเป็นฟอร์มทีละจุด · GPS · เวลา · ระยะทาง · ความเร็วเฉลี่ย</p></div></header>
 <main class="container">
 <section class="panel"><h2>ข้อมูลเที่ยวเดินทาง</h2><div class="grid"><div class="field"><label for="tripName">ชื่อเที่ยว / งาน</label><input id="tripName" placeholder="เช่น ศรีราชา → สมุทรสาคร"></div><div class="field"><label for="vehicle">ทะเบียนรถ / หมายเหตุ</label><input id="vehicle" placeholder="เช่น 71-7117"></div></div><p class="hint">บันทึกทีละจุดเหมือนแบบฟอร์ม ต้องกรอกเลขไมล์ก่อนกดถัดไป โดยเลขไมล์ต้องไม่น้อยกว่าจุดก่อนหน้า (เลขไมล์เท่ากันได้) กดย้อนกลับเพื่อแก้ไขได้เสมอ เวลาและพิกัด GPS ต้องอนุญาตให้ Safari ใช้ตำแหน่ง</p></section>
 <section class="panel" id="wizardPanel"><h2>ฟอร์มบันทึกการเดินทาง <span id="pointCount" class="hint"></span></h2>
 <div id="wizardTabs" class="wizard-tabs no-print" aria-label="เลือกจุดเดินทาง"></div>
 <div id="points"></div>
-<div class="wizard-nav no-print"><button id="prevPoint" class="btn">← ย้อนกลับ</button><button id="nextPoint" class="btn primary">ถัดไป →</button></div>
-<div id="wizExtra" class="actions no-print" style="margin-top:11px"><button id="finishPoint" class="btn green">🏁 ไปจุดสิ้นสุด</button><button id="addPoint" class="btn">＋ เพิ่มจุดระหว่างทาง</button><button id="resetTrip" class="btn red">เริ่มเที่ยวใหม่</button></div></section>
+<div class="wizard-nav no-print"><button id="prevPoint" class="btn q-prev">← ย้อนกลับ</button><button id="nextPoint" class="btn q-next">ถัดไป →</button><button id="addPoint" class="btn q-add">＋ เพิ่มจุดระหว่างทาง</button><button id="resetTrip" class="btn q-reset">↻ เริ่มเที่ยวใหม่</button></div>
+<div id="wizExtra" class="no-print q-extra"><button id="finishPoint" class="btn green">🏁 ไปจุดสิ้นสุด</button></div></section>
 <section class="panel"><h2>สรุปผลการเดินทาง</h2><div class="statgrid"><div class="stat"><div class="name">ระยะทางรวม</div><div id="dist" class="value">—</div></div><div class="stat"><div class="name">เวลาทั้งเที่ยว</div><div id="elapsed" class="value">—</div></div><div class="stat"><div class="name">ความเร็วเฉลี่ยรวม (รวมเวลาจอด)</div><div id="avgAll" class="value">—</div></div><div class="stat"><div class="name">ความเร็วเฉลี่ยขณะเดินทาง (ไม่รวมเวลาจอดที่บันทึก)</div><div id="avgMoving" class="value">—</div></div><div class="stat"><div class="name">เวลาจอดพักรวม</div><div id="stopped" class="value">—</div></div><div class="stat"><div class="name">เวลาเดินทางสุทธิ</div><div id="moving" class="value">—</div></div></div><div id="warnings" hidden class="banner"></div><h2 style="margin-top:18px">รายละเอียดแต่ละช่วง</h2><div id="segments" class="hint">กรอกเวลาและเลขไมล์อย่างน้อยสองจุดเพื่อคำนวณ</div></section>
 <section class="panel no-print"><h2>บันทึกและส่งออก</h2><div class="actions"><button id="saveTrip" class="btn green">💾 บันทึกเที่ยวนี้</button><button id="csv" class="btn">ส่งออก CSV</button><button id="json" class="btn">สำรอง JSON</button><button id="importBtn" class="btn">นำเข้า JSON</button><button id="printBtn" class="btn primary">📄 ดูรายงาน A4 / PDF</button></div><input id="importFile" type="file" accept="application/json,.json" hidden><p class="hint">ข้อมูลและพิกัด GPS เก็บอยู่ในเบราว์เซอร์เครื่องนี้ ไม่ได้ส่งขึ้น GitHub หรือเซิร์ฟเวอร์ ควรสำรอง JSON เป็นระยะ โดยเฉพาะก่อนล้างข้อมูล Safari</p></section>
 <section class="panel no-print" id="savedPanel"><h2>ประวัติเที่ยวที่บันทึก</h2><div id="saved"></div></section>
 
-<section class="panel no-print" id="reportTools"><h2>รายงานการเดินทาง A4 แนวตั้ง</h2><p class="hint">แตะภาพแผนที่หรือกดขยายแผนที่ เพื่อซูมด้วยสองนิ้วและลากดูจุดต่าง ๆ กด “อัปเดตรายงาน” หลังแก้จุดเดินทาง; ต้องมีพิกัด GPS อย่างน้อย 2 จุดจึงจะแสดงเส้นทางบนแผนที่ได้</p><div class="actions"><button id="expandMap" class="btn green" type="button">🔎 ขยายแผนที่ / ซูม</button><button id="refreshReport" class="btn primary">🔄 อัปเดตรายงาน</button><button id="routeReport" class="btn">🛣️ คำนวณเส้นทางตามถนน</button><button id="editRoute" class="btn primary">✏️ แก้ไขเส้นทาง</button><button id="downloadReport" class="btn green">🖨️ พิมพ์ / บันทึก PDF A4</button></div><div class="grid" style="margin-top:13px"><div class="field"><label>แนบรูปให้จุดเดินทาง</label><select id="photoPoint"></select></div><div class="field"><label>เลือกรูปจากกล้องหรือคลังภาพ</label><input id="photoFile" type="file" accept="image/*" multiple></div></div><div id="reportStatus" class="hint" style="margin-top:8px" aria-live="polite"></div></section>
+<section class="panel no-print" id="reportTools"><h2>รายงานการเดินทาง A4 แนวตั้ง</h2><p class="hint">กด “อัปเดตรายงาน” หลังแก้จุดเดินทาง; ต้องมีพิกัด GPS อย่างน้อย 2 จุดจึงจะแสดงเส้นทางบนแผนที่ได้</p><div class="actions"><button id="expandMap" hidden type="button" aria-hidden="true"></button><button id="refreshReport" class="btn primary">🔄 อัปเดตรายงาน</button><button id="routeReport" class="btn">🛣️ คำนวณเส้นทางตามถนน</button><button id="editRoute" hidden type="button" aria-hidden="true"></button><button id="downloadReport" class="btn green">🖨️ พิมพ์ A4</button><button id="shareImage" class="btn primary" type="button">🖼️ แชร์ / บันทึกภาพ</button><button id="sharePDF" class="btn green" type="button">📄 แชร์ / บันทึก PDF</button></div><div class="grid" style="margin-top:13px"><div class="field"><label>แนบรูปให้จุดเดินทาง</label><select id="photoPoint"></select></div><div class="field"><label>เลือกรูปจากกล้องหรือคลังภาพ</label><input id="photoFile" type="file" accept="image/*" multiple></div></div><div id="reportStatus" class="hint" style="margin-top:8px" aria-live="polite"></div></section>
 <section id="printReport" class="report-page" aria-label="รายงานขนาด A4 แนวตั้ง"><div class="report-top"><div><strong>Q TRIP LOG GPS</strong><small>TRAVEL ROUTE REPORT · A4 PORTRAIT</small></div><div class="report-badge">บันทึกการเดินทาง</div></div><h2 id="rTitle">รายงานการเดินทาง</h2><div id="rSub" class="report-sub"></div><div id="reportMap" role="img" aria-label="แผนที่เส้นทาง"><div class="map-placeholder">📍 แผนที่จะแสดงเมื่อบันทึกพิกัด GPS อย่างน้อย 2 จุด</div></div><div id="mapCredit" class="report-map-credit">แผนที่ © OpenStreetMap contributors · เส้นทางคำนวณเป็นเส้นทางประมาณการ ไม่ใช่ GPS ที่ติดตามตลอดทาง</div><div id="rStats" class="report-stats"></div><h3>ลำดับจุดเดินทาง</h3><div id="rPoints" class="report-points"></div><h3 id="photosHeading">ภาพประกอบการเดินทาง</h3><div id="rPhotos" class="report-photos"></div><div class="report-foot">Q Trip Log GPS · ระยะทางและความเร็วสรุปจากเลขไมล์รถ (หากกรอกข้อมูลครบ) · แผนที่เป็นเส้นทางประมาณการ</div></section>
 </main>
 <div id="routeModal" class="route-modal no-print" hidden role="dialog" aria-modal="true" aria-label="แก้ไขเส้นทางบนแผนที่">
@@ -103,6 +118,8 @@
 <footer>ความเร็วเฉลี่ยคำนวณจากเลขไมล์รถและเวลา ไม่ใช่ GPS วัดความเร็วแบบเรียลไทม์ · GPS ใช้เพื่อระบุพิกัดเท่านั้น · ใช้งานขณะรถจอดเท่านั้น</footer>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoT4vfgc+gA6r0=" crossorigin="anonymous">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.2/jspdf.umd.min.js" crossorigin="anonymous"></script>
 <script>
 (()=>{'use strict';
 const $=id=>document.getElementById(id), KEY='q-trip-log-v1', LIST='q-trip-log-saved-v1';
@@ -325,7 +342,7 @@ function renderMap(points){
 }
 async function printA4(){refresh();const button=$('downloadReport');button.disabled=true;button.textContent='กำลังเตรียมแผนที่…';
  try{const ok=await mapReady;if(!ok&&lastGpsPoints.length>=2){alert('ภาพแผนที่ยังโหลดไม่ครบ กรุณาตรวจสอบอินเทอร์เน็ตและกดพิมพ์อีกครั้ง');return;}window.print();}
- finally{button.disabled=false;button.textContent='🖨️ พิมพ์ / บันทึก PDF A4';}}
+ finally{button.disabled=false;button.textContent='🖨️ พิมพ์ A4';}}
 $('refreshReport').onclick=refresh;
 $('printBtn').addEventListener('click',()=>setTimeout(refresh,150));
 $('downloadReport').onclick=printA4;
@@ -413,6 +430,85 @@ $('mapViewer').hidden=false;document.body.style.overflow='hidden';if(!map){map=L
 const signature=points.map(p=>p.id+':'+p.lat+','+p.lon).join('|');const manual=trip.routeEdit?.signature===signature&&trip.routeEdit.geometry?.length>1;const line=manual?trip.routeEdit.geometry:points.map(p=>[+p.lat,+p.lon]);if(line.length>1)L.polyline(line,{color:'#126cbb',weight:5,opacity:.85,dashArray:manual?undefined:'7 6'}).addTo(group);
 $('mapPoint').replaceChildren();points.forEach((p,i)=>{const ll=[+p.lat,+p.lon],opt=document.createElement('option');opt.value=i;opt.textContent=p.seq+'. '+(p.name||'จุดเดินทาง');$('mapPoint').append(opt);const icon=L.divIcon({className:'',html:'<div class="q-marker '+p.role+'">'+p.seq+'</div>',iconSize:[27,27],iconAnchor:[13,13]});const popup=document.createElement('div');const strong=document.createElement('strong');strong.textContent='จุดที่ '+p.seq+' — '+(p.name||'จุดเดินทาง');popup.append(strong);if(p.odo!==''&&p.odo!=null){const info=document.createElement('div');info.textContent='เลขไมล์ '+p.odo+' กม.';popup.append(info)}L.marker(ll,{icon}).bindPopup(popup).addTo(group)});setTimeout(()=>{map.invalidateSize();fit()},80)}
 function fit(){if(!map||!points.length)return;const b=points.map(p=>[+p.lat,+p.lon]);if(b.length===1)map.setView(b[0],16);else map.fitBounds(b,{padding:[35,35],maxZoom:16})}
-$('expandMap').onclick=show;$('reportMap').addEventListener('click',show);$('reportMap').setAttribute('title','แตะเพื่อขยายแผนที่');$('closeMap').onclick=end;$('mapFit').onclick=fit;$('mapFocus').onclick=()=>{const p=points[+$('mapPoint').value];if(p&&map)map.flyTo([+p.lat,+p.lon],17)};document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('mapViewer').hidden)end()});
+$('expandMap').onclick=show;$('reportMap').removeAttribute('title');$('closeMap').onclick=end;$('mapFit').onclick=fit;$('mapFocus').onclick=()=>{const p=points[+$('mapPoint').value];if(p&&map)map.flyTo([+p.lat,+p.lon],17)};document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('mapViewer').hidden)end()});
 })();
-</script></body></html>
+</script><script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id);
+const waiting=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+async function getReportCanvas(){
+  $('refreshReport').click();
+  const label=$('reportStatus');
+  const prev=label.textContent;
+  // Wait for image tiles (onload), font and DOM layout; report remains as seen on screen.
+  if(document.fonts?.ready)await document.fonts.ready;
+  const images=[...$('printReport').querySelectorAll('img')];
+  await Promise.race([Promise.all(images.map(img=>img.complete?Promise.resolve():new Promise(resolve=>{img.addEventListener('load',resolve,{once:true});img.addEventListener('error',resolve,{once:true})}))),waiting(7000)]);
+  if(typeof window.html2canvas!=='function')throw Error('ไม่สามารถโหลดตัวสร้างภาพได้ กรุณาเชื่อมต่ออินเทอร์เน็ตแล้วลองอีกครั้ง');
+  const report=$('printReport');
+  const canvas=await html2canvas(report,{backgroundColor:'#ffffff',scale:Math.min(2,window.devicePixelRatio||2),useCORS:true,allowTaint:false,logging:false,scrollX:0,scrollY:-window.scrollY,windowWidth:Math.max(900,document.documentElement.clientWidth)});
+  if(!canvas.width||!canvas.height)throw Error('สร้างภาพรายงานไม่สำเร็จ');
+  return canvas;
+}
+const filename=ext=>`Q_TRIP_LOG_${new Date().toISOString().slice(0,10)}_V1.15.${ext}`;
+function downloadFile(file){const url=URL.createObjectURL(file);const a=document.createElement('a');a.href=url;a.download=file.name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);}
+function shareFile(file){
+  // Called immediately from the second direct tap, preserving Safari's user gesture.
+  if(navigator.share&&navigator.canShare?.({files:[file]})){
+    return navigator.share({files:[file],title:'Q TRIP LOG GPS V1.15'}).then(()=> 'shared').catch(e=>{
+      if(e.name==='AbortError')return 'cancelled';downloadFile(file);return 'downloaded';
+    });
+  }
+  downloadFile(file);return Promise.resolve('downloaded');
+}
+async function buildPDF(canvas){
+ if(!window.jspdf?.jsPDF)throw Error('ไม่สามารถโหลดตัวสร้าง PDF ได้ กรุณาเชื่อมต่ออินเทอร์เน็ตแล้วลองอีกครั้ง');
+ const pdf=new window.jspdf.jsPDF({orientation:'portrait',unit:'mm',format:'a4',compress:true});
+ const mmW=210,mmH=297,margin=9,pw=mmW-margin*2,ph=mmH-margin*2;
+ const pageHeightPx=Math.max(1,Math.floor(canvas.width*ph/pw));
+ let y=0,page=0;
+ while(y<canvas.height){
+   const h=Math.min(pageHeightPx,canvas.height-y);
+   const crop=document.createElement('canvas');crop.width=canvas.width;crop.height=h;
+   crop.getContext('2d').drawImage(canvas,0,y,canvas.width,h,0,0,canvas.width,h);
+   if(page++)pdf.addPage();
+   pdf.addImage(crop.toDataURL('image/jpeg',0.88),'JPEG',margin,margin,pw,h*pw/canvas.width,undefined,'FAST');
+   y+=h;
+ }
+ return new File([pdf.output('blob')],filename('pdf'),{type:'application/pdf'});
+}
+const pending={image:null,pdf:null};
+async function run(kind){
+ const button=$(kind==='image'?'shareImage':'sharePDF');
+ const original=kind==='image'?'🖼️ แชร์ / บันทึกภาพ':'📄 แชร์ / บันทึก PDF';
+ const status=$('reportStatus');
+ if(pending[kind]){
+   const file=pending[kind];pending[kind]=null;
+   button.textContent=original;
+   // Must invoke share synchronously during the actual tap, before any await.
+   try{
+     const completion=shareFile(file);
+     completion.then(outcome=>{status.textContent=outcome==='shared'?'แชร์รายงานเรียบร้อย':outcome==='cancelled'?'ยกเลิกการแชร์':kind==='image'?'ดาวน์โหลดภาพแล้ว เปิดไฟล์และกดแชร์ > บันทึกภาพ':'ดาวน์โหลดไฟล์ PDF แล้ว';}).catch(e=>{status.textContent='แชร์ไม่สำเร็จ: '+e.message;});
+   }catch(err){status.textContent='แชร์ไม่ได้: '+err.message;downloadFile(file);}
+   return;
+ }
+ button.disabled=true;button.textContent='กำลังสร้างไฟล์…';
+ try{
+   status.textContent='กำลังจัดเตรียมรายงาน โปรดรอสักครู่';
+   const canvas=await getReportCanvas();
+   let file;
+   if(kind==='image'){
+     const blob=await new Promise((resolve,reject)=>canvas.toBlob(b=>b?resolve(b):reject(Error('แปลงเป็นไฟล์ภาพไม่สำเร็จ')),'image/png'));
+     file=new File([blob],filename('png'),{type:'image/png'});
+   }else file=await buildPDF(canvas);
+   pending[kind]=file;
+   button.textContent=kind==='image'?'📤 แตะอีกครั้งเพื่อแชร์ภาพ':'📤 แตะอีกครั้งเพื่อแชร์ PDF';
+   status.textContent='สร้างไฟล์เสร็จแล้ว กดปุ่มเดิมอีกครั้งเพื่อเปิดเมนูแชร์ iPhone';
+ }catch(err){button.textContent=original;status.textContent='ส่งออกรายงานไม่สำเร็จ: '+err.message;alert(status.textContent+'\nลองตรวจสอบอินเทอร์เน็ตหรือใช้ปุ่มพิมพ์ A4');}
+ finally{button.disabled=false;}
+}
+$('shareImage').onclick=()=>run('image');
+$('sharePDF').onclick=()=>run('pdf');
+})();
+</script>
+</body></html>
