@@ -113,7 +113,7 @@
 <div id="points"></div>
 <div class="wizard-nav no-print"><button id="prevPoint" class="btn q-prev">← ย้อนกลับ</button><button id="nextPoint" class="btn q-next">ถัดไป →</button><button id="addPoint" class="btn q-add">＋ เพิ่มจุดระหว่างทาง</button><button id="resetTrip" class="btn q-reset">↻ เริ่มเที่ยวใหม่</button></div>
 <div id="wizExtra" class="no-print q-extra"><button id="finishPoint" class="btn green">🏁 ไปจุดสิ้นสุด</button></div></section>
-<section class="panel"><h2>สรุปผลการเดินทาง</h2><div class="statgrid"><div class="stat"><div class="name">ระยะทางรวม</div><div id="dist" class="value">—</div></div><div class="stat"><div class="name">เวลาทั้งเที่ยว</div><div id="elapsed" class="value">—</div></div><div class="stat"><div class="name">ความเร็วเฉลี่ยรวม (รวมเวลาจอด)</div><div id="avgAll" class="value">—</div></div><div class="stat"><div class="name">ความเร็วเฉลี่ยขณะเดินทาง (ไม่รวมเวลาจอดที่บันทึก)</div><div id="avgMoving" class="value">—</div></div><div class="stat"><div class="name">เวลาจอดพักรวม</div><div id="stopped" class="value">—</div></div><div class="stat"><div class="name">เวลาเดินทางสุทธิ</div><div id="moving" class="value">—</div></div></div><div id="warnings" hidden class="banner"></div><h2 style="margin-top:18px">รายละเอียดแต่ละช่วง</h2><div id="segments" class="hint">กรอกเวลาและเลขไมล์อย่างน้อยสองจุดเพื่อคำนวณ</div></section>
+<div id="warnings" hidden class="banner"></div>
 <section class="panel no-print"><h2>บันทึกและส่งออก</h2><div class="actions"><button id="saveTrip" class="btn green">💾 บันทึกเที่ยวนี้</button><button id="csv" class="btn">ส่งออก CSV</button><button id="json" class="btn">สำรอง JSON</button><button id="importBtn" class="btn">นำเข้า JSON</button><button id="printBtn" class="btn primary">📄 ดูรายงาน A4 / PDF</button></div><input id="importFile" type="file" accept="application/json,.json" hidden><p class="hint">ข้อมูลและพิกัด GPS เก็บอยู่ในเบราว์เซอร์เครื่องนี้ ไม่ได้ส่งขึ้น GitHub หรือเซิร์ฟเวอร์ ควรสำรอง JSON เป็นระยะ โดยเฉพาะก่อนล้างข้อมูล Safari</p></section>
 <section class="panel no-print" id="savedPanel"><h2>ประวัติเที่ยวที่บันทึก</h2><div id="saved"></div></section>
 
@@ -124,7 +124,7 @@
 <div class="q-map-control-row"><button type="button" class="btn green" id="qFitRoute">🎯 พอดีกรอบ / เห็นทุกจุด</button><button type="button" class="btn" id="qResetMapStyle">↶ คืนค่าความหนาเส้น</button></div>
 <div class="q-map-note">ค่าเริ่มต้นแผนที่จะขยายให้เส้นทางอยู่ในกรอบมากที่สุด ปรับซูมเพิ่มแล้วบางจุดอาจถูกตัดออกจากกรอบ กด “พอดีกรอบ” เพื่อกลับมาเห็นครบทุกจุด · ค่าที่ตั้งใช้กับภาพและ PDF ด้วย</div>
 </div><div class="grid" style="margin-top:13px"><div class="field"><label>แนบรูปให้จุดเดินทาง</label><select id="photoPoint"></select></div><div class="field"><label>เลือกรูปจากกล้องหรือคลังภาพ</label><input id="photoFile" type="file" accept="image/*" multiple></div></div><div id="reportStatus" class="hint" style="margin-top:8px" aria-live="polite"></div></section>
-<section id="printReport" class="report-page" aria-label="รายงานขนาด A4 แนวตั้ง"><div class="report-top"><div><strong>Q TRIP LOG GPS</strong><small>TRAVEL ROUTE REPORT · A4 PORTRAIT</small></div><div class="report-badge">บันทึกการเดินทาง</div></div><h2 id="rTitle">รายงานการเดินทาง</h2><div id="rSub" class="report-sub"></div><div id="reportMap" role="img" aria-label="แผนที่เส้นทาง"><div class="map-placeholder">📍 แผนที่จะแสดงเมื่อบันทึกพิกัด GPS อย่างน้อย 2 จุด</div></div><div id="gpsPointStatus" class="report-map-credit" style="margin-top:8px;line-height:1.6"></div><div id="mapCredit" class="report-map-credit">แผนที่ © OpenStreetMap contributors · เส้นทางคำนวณเป็นเส้นทางประมาณการ ไม่ใช่ GPS ที่ติดตามตลอดทาง</div><div id="rStats" class="report-stats"></div><h3>ลำดับจุดเดินทาง</h3><div id="rPoints" class="report-points"></div><h3 id="photosHeading">ภาพประกอบการเดินทาง</h3><div id="rPhotos" class="report-photos"></div><div class="report-foot">Q Trip Log GPS · ระยะทางและความเร็วสรุปจากเลขไมล์รถ (หากกรอกข้อมูลครบ) · แผนที่เป็นเส้นทางประมาณการ</div></section>
+<section id="printReport" class="report-page" aria-label="รายงานขนาด A4 แนวตั้ง"><div class="report-top"><div><strong>Q TRIP LOG GPS</strong><small>TRAVEL ROUTE REPORT · A4 PORTRAIT</small></div><div class="report-badge">บันทึกการเดินทาง</div></div><h2 id="rTitle">รายงานการเดินทาง</h2><div id="rSub" class="report-sub"></div><div id="reportMap" role="img" aria-label="แผนที่เส้นทาง"><div class="map-placeholder">📍 แผนที่จะแสดงเมื่อบันทึกพิกัด GPS อย่างน้อย 2 จุด</div></div><div id="gpsPointStatus" class="report-map-credit" style="margin-top:8px;line-height:1.6"></div><div id="mapCredit" class="report-map-credit">แผนที่ © OpenStreetMap contributors · เส้นทางคำนวณเป็นเส้นทางประมาณการ ไม่ใช่ GPS ที่ติดตามตลอดทาง</div><h3>สรุปผลการเดินทาง</h3><div id="rStats" class="report-stats"></div><h3>ลำดับจุดเดินทาง</h3><div id="rPoints" class="report-points"></div><h3 id="photosHeading">ภาพประกอบการเดินทาง</h3><div id="rPhotos" class="report-photos"></div><div class="report-foot">Q Trip Log GPS · ระยะทางและความเร็วสรุปจากเลขไมล์รถ (หากกรอกข้อมูลครบ) · แผนที่เป็นเส้นทางประมาณการ</div></section>
 </main>
 <div id="routeModal" class="route-modal no-print" hidden role="dialog" aria-modal="true" aria-label="แก้ไขเส้นทางบนแผนที่">
   <div class="route-dialog">
@@ -221,7 +221,21 @@ let validSeq=seg.every(s=>s.t!==null)&&ps.slice(1,-1).every(p=>p.status==='passi
 if(!allStopKnown&&ps.length>2)warns.push('บางจุดยังไม่มีเวลาเข้า–ออกครบ จึงยังคำนวณเวลาขับสุทธิไม่ได้');
 if(elapsed!==null&&stopTotal>elapsed)warns.push('เวลาจอดรวมมากกว่าเวลาทั้งเที่ยว กรุณาตรวจสอบข้อมูล');
 return {seg,totalDist,elapsed,stopTotal,validSeq,allStopKnown,moving:elapsed!==null&&validSeq&&stopTotal<=elapsed?elapsed-stopTotal:null,warns};}
-function updateStats(){const c=calculations();$('dist').textContent=c.totalDist===null?'—':num(c.totalDist)+' กม.';$('elapsed').textContent=duration(c.elapsed);$('avgAll').textContent=speed(c.totalDist,c.elapsed);$('stopped').textContent=c.allStopKnown&&c.validSeq?duration(c.stopTotal):'—';$('moving').textContent=duration(c.moving);$('avgMoving').textContent=speed(c.totalDist,c.moving);$('warnings').hidden=!c.warns.length;$('warnings').textContent=c.warns.join('\n');$('segments').innerHTML=c.seg.map(s=>`<div class="interval"><strong>${esc(s.a.name||'จุด '+s.index)} → ${esc(s.b.name||'จุด '+(s.index+1))}</strong><div class="nums">${s.d===null?'ระยะทาง —':num(s.d)+' กม.'} · ${duration(s.t)} · เฉลี่ย ${speed(s.d,s.t)}</div></div>`).join('')||'<span class="hint">เพิ่มจุดเพื่อดูรายละเอียด</span>'}
+function updateStats(){
+ const c=calculations();
+ const fields=[
+  ['ระยะทางรวม',c.totalDist===null?'—':num(c.totalDist)+' กม.'],
+  ['เวลาทั้งเที่ยว',duration(c.elapsed)],
+  ['ความเร็วเฉลี่ยรวม',speed(c.totalDist,c.elapsed)],
+  ['ความเร็วเฉลี่ยขณะเดินทาง',speed(c.totalDist,c.moving)],
+  ['เวลาจอดพักรวม',c.allStopKnown&&c.validSeq?duration(c.stopTotal):'—'],
+  ['เวลาเดินทางสุทธิ',duration(c.moving)],
+  ['จำนวนจุด',trip.points.length+' จุด']
+ ];
+ $('rStats').innerHTML=fields.map(([label,value])=>`<div class="report-stat"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('');
+ $('warnings').hidden=!c.warns.length;
+ $('warnings').textContent=c.warns.join('\n');
+}
 function render(){ $('tripName').value=trip.name;$('vehicle').value=trip.vehicle;renderPoints();updateStats();persist();renderSaved()}
 $('points').addEventListener('input',e=>{let el=e.target.closest('[data-i]');if(!el||!e.target.dataset.k)return;trip.points[Number(el.dataset.i)][e.target.dataset.k]=e.target.value;if(e.target.dataset.k==='odo'){const warn=$('odoValidation');if(warn){warn.hidden=true;warn.textContent=''}e.target.classList.remove('odo-invalid');e.target.setAttribute('aria-invalid','false')}persist();updateStats()});
 $('points').addEventListener('click',e=>{const b=e.target.closest('[data-action]');if(!b)return;let i=Number(b.closest('[data-i]').dataset.i),a=b.dataset.action,p=trip.points[i];
@@ -257,7 +271,7 @@ $('addPoint').onclick=()=>{if(checkOdo(activeIndex))insertMiddle()};
 $('prevPoint').onclick=()=>setActive(activeIndex-1);
 $('nextPoint').onclick=()=>{
  if(!checkOdo(activeIndex))return;
- if(activeIndex===trip.points.length-1){$('saveTrip').scrollIntoView({behavior:'smooth',block:'center'});return}
+ if(activeIndex===trip.points.length-1){$('refreshReport').click();$('printReport').scrollIntoView({behavior:'smooth',block:'start'});return}
  if(activeIndex===trip.points.length-2){setActive(trip.points.length-1);return}
  setActive(activeIndex+1);
 };
@@ -353,12 +367,6 @@ const coords=p=>Number.isFinite(Number(p.lat))&&Number.isFinite(Number(p.lon))&&
 const mapPoints=ps=>ps.map((p,i)=>({...p,pointNumber:i+1,pointRole:i===0?'start':i===ps.length-1?'end':'middle'})).filter(p=>coords(p));
 function refresh(){const t=read();if(!t||!Array.isArray(t.points))return;const ps=t.points;
 $('rTitle').textContent=t.name||'รายงานการเดินทาง';$('rSub').textContent=[t.vehicle&&'รถ / หมายเหตุ: '+t.vehicle,ps[0]?.departure&&'ออกเดินทาง: '+fmt(ps[0].departure),ps.at(-1)?.arrival&&'ถึงปลายทาง: '+fmt(ps.at(-1).arrival)].filter(Boolean).join('  ·  ');
-const dist=ps[0]?.odo!==''&&ps.at(-1)?.odo!==''?Number(ps.at(-1).odo)-Number(ps[0].odo):NaN;
-const total=mins(ps[0]?.departure,ps.at(-1)?.arrival),stops=ps.slice(1,-1).map(p=>mins(p.arrival,p.departure));
-const validStops=stops.every(x=>x!==null&&x>=0),stop=validStops?stops.reduce((a,b)=>a+b,0):null,moving=validStops&&total!==null&&total>=stop?total-stop:null;
-const speed=Number.isFinite(dist)&&dist>=0&&moving>0?(dist*60/moving).toFixed(1)+' กม./ชม.':'—';
-const fields=[['ระยะทางรวม',Number.isFinite(dist)&&dist>=0?dist.toLocaleString('th-TH')+' กม.':'—'],['เวลาทั้งเที่ยว',duration(total)],['เวลาจอดพัก',duration(stop)],['เวลาขับสุทธิ',duration(moving)],['ความเร็วขณะเดินทาง',speed],['จำนวนจุด',ps.length+' จุด']];
-$('rStats').innerHTML=fields.map(([k,v])=>'<div class="report-stat"><span>'+esc(k)+'</span><strong>'+esc(v)+'</strong></div>').join('');
 // The second line for each destination reuses the same odometer and travel-time
 // calculation as the on-screen "รายละเอียดแต่ละช่วง" panel.
 const reportSegment=(p,i)=>{
