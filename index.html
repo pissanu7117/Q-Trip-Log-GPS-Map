@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#143a65"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Q Trip Log">
-<title>Q Trip Log GPS V1.18 | บันทึกการเดินทาง</title>
+<title>Q Trip Log GPS V1.21 | บันทึกการเดินทาง</title>
 <!-- Updated: GPS repeat taps refresh time; start/end point controls and iPhone datetime layout -->
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
@@ -52,20 +52,34 @@
 .wizard-delete{white-space:nowrap;font-size:.83rem;padding:8px 11px}
 /* V1. form-by-point wizard */
 .wizard-tabs{display:flex;gap:7px;overflow-x:auto;padding:4px 0 10px;scrollbar-width:thin;-webkit-overflow-scrolling:touch}
-.wtab{white-space:nowrap;border:1px solid #cbdaeb;background:#edf3fa;color:#345775;border-radius:24px;padding:9px 13px;font-weight:750;min-width:90px}
+.wtab{white-space:nowrap;border:1px solid #cbdaeb;background:#edf3fa;color:#345775;border-radius:10px;padding:9px 13px;font-weight:750;min-width:90px}
 .wtab.active{background:#146a9f;color:white;border-color:#146a9f}.wtab.done:not(.active){border-color:#6cb894}
 .wizard-top{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:12px 0}
 .wizard-nav{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:16px}
-.wizard-nav button{min-height:50px}.wizard-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:13px 0}
-.wizard-actions .btn{font-size:.84rem;padding:11px 5px;min-height:56px}
-.wizard-actions .btn:disabled{opacity:.43;cursor:not-allowed}
+.wizard-nav button{min-height:50px}.wizard-actions{
+  display:grid;grid-template-columns:repeat(3,minmax(0,86px));justify-content:center;
+  gap:clamp(6px,2vw,12px);margin:13px 0
+}
+.wizard-actions .btn{
+  display:grid;align-content:center;justify-items:center;gap:4px;
+  width:100%;aspect-ratio:1;border-radius:50%;padding:5px;
+  font-size:clamp(.78rem,3.5vw,.92rem);line-height:1.15;white-space:nowrap
+}
+.wizard-actions .action-icon{font-size:1.15rem;line-height:1}
+.wizard-action-help{margin:0 0 10px;padding:9px 11px;border-radius:9px;background:#eef4f9}
+.wizard-action-help p{margin:0}
+.wizard-action-help p+p{margin-top:4px}
+.wizard-actions [data-action="passing"]{background:#146a9f;color:#fff}
+.wizard-actions [data-action="stop"]{background:#ffcd4e;color:#463100}
+.wizard-actions [data-action="resume"]{background:#26784b;color:#fff}
+.wizard-actions .btn:disabled{opacity:.48;cursor:not-allowed}
 .wizard-feedback{background:#edf7f0;border-radius:10px;padding:10px;color:#285b41;font-size:.86rem;margin:9px 0}
 .wizard-note{margin:9px 0;color:#56718c;font-size:.83rem;line-height:1.55}
 .wizard-point{background:#fbfdff;border:1px solid #d5e3ef;border-radius:13px;padding:14px}
 .wizard-point .field input{min-height:49px;font-size:16px}.wizard-point .grid{gap:12px}
 .odo-error{color:#ac2938;font-size:.88rem;font-weight:650;line-height:1.5;margin:6px 0 10px;padding:10px 12px;background:#fff0f1;border-radius:9px;border:1px solid #f2bfc5}.wizard-point input.odo-invalid{border:2px solid #c62c41!important;background:#fffafa}.odo-hint{font-size:.78rem;color:#63798d;margin-top:4px}.wizard-compact{display:flex;align-items:center;justify-content:space-between;gap:9px}
 .wizard-collapsed{display:none}.wizard-status{font-size:.8rem;color:#44647b}
-@media(max-width:550px){.wizard-actions{gap:5px}.wizard-actions .btn{font-size:.78rem;padding:10px 4px}.wizard-point{padding:11px}}
+@media(max-width:550px){.wizard-point{padding:11px}}
 @media print{#wizardTabs,.wizard-nav,.wizard-actions,#wizExtra{display:none!important}}
 
 #reportMap{cursor:zoom-in}.map-view[hidden]{display:none!important}.map-view{position:fixed;inset:0;z-index:6500;background:#fff;display:flex;flex-direction:column}.map-head{padding:calc(env(safe-area-inset-top) + 10px) 12px 10px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid #dce5ef}.map-head strong{color:#143a65}.map-hint{padding:8px 12px;margin:0;font-size:12px;color:#5b7085}.map-zoom{flex:1;min-height:0;background:#e9f0f6}.map-foot{display:flex;gap:7px;align-items:center;padding:10px 12px calc(env(safe-area-inset-bottom) + 10px)}.map-foot select{flex:1;width:auto;min-width:0}.q-marker{border:2px solid white;border-radius:50%;background:#176ca6;color:#fff;text-align:center;line-height:23px;font:bold 12px system-ui;box-shadow:0 1px 5px #0005}.q-marker.start{background:#168451}.q-marker.end{background:#c13e43}@media print{.map-view,#expandMap{display:none!important}}
@@ -88,8 +102,7 @@
 .q-save-result{margin:10px 0;padding:12px;border-radius:10px;border:1px solid #cfdfeb;line-height:1.6;font-size:.87rem;white-space:pre-line}
 .q-save-result.success{background:#e8f7ee;border-color:#8bd4a5;color:#14623a}
 .q-save-result.warning{background:#fff6df;border-color:#f0d18b;color:#815914}
-.q-save-result.pending{background:#edf5fd;border-color:#9ec4ed;color:#17547e}
-.wtab.gps-ok{background:#e7f7ed;border-color:#69bd8a;color:#18633e}.wtab.gps-missing{background:#fff4db;border-color:#e8bc67;color:#805611}.wtab.gps-pending{background:#e8f2ff;border-color:#83afe3;color:#215c9b}.wtab.active{outline:2px solid #166fa9;outline-offset:1px}.wtab.active.gps-ok{background:#176d49;color:white}.wtab.active.gps-missing{background:#915f17;color:white}.wizard-status{font-weight:700}
+.wtab.gps-ok{background:#e7f7ed;border-color:#69bd8a;color:#18633e}.wtab.gps-missing{background:#fff4db;border-color:#e8bc67;color:#805611}.wtab.active{outline:2px solid #166fa9;outline-offset:1px}.wtab.active.gps-ok{background:#176d49;color:white}.wtab.active.gps-missing{background:#915f17;color:white}.wizard-status{font-weight:700}
 
 /* V1.18: editable report map scale and route stroke, kept outside printed page. */
 .q-map-controls{margin:12px 0;padding:13px;border:1px solid #d5e2ee;background:#f5f9fd;border-radius:12px}
@@ -102,14 +115,51 @@
 .q-map-note{font-size:.78rem;line-height:1.55;color:#63798e}
 @media(max-width:550px){.q-map-control-row label{flex-basis:100%}.q-map-control-row input[type=range]{min-width:85px}}
 @media print{.q-map-controls{display:none!important}}
+/* Point buttons can also be displayed as numbered map pins. */
+.point-button-shape{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 6px;color:#435670;font-size:.87rem;font-weight:700}
+.point-button-shape select{width:auto;min-height:44px;padding:7px 9px;font-size:16px}
+.wtab-pin,.wtab-pin-caption{display:none}
+.wizard-tabs--pin{gap:5px;padding-inline:4px}
+.wizard-tabs--pin .wtab{
+  --pin-fill:#fff;--pin-border:#9aaabd;--pin-text:#254866;
+  display:flex;flex:0 0 60px;flex-direction:column;align-items:center;
+  justify-content:flex-start;gap:5px;min-width:0;min-height:70px;padding:2px 0;
+  border:0;border-radius:10px;background:transparent;color:#345775;outline:0
+}
+.wizard-tabs--pin .wtab.gps-ok{--pin-fill:#e7f7ed;--pin-border:#69bd8a;--pin-text:#18633e}
+.wizard-tabs--pin .wtab.gps-missing{--pin-fill:#fff4db;--pin-border:#d4a953;--pin-text:#805611}
+.wizard-tabs--pin .wtab.active .wtab-pin::before{box-shadow:0 0 0 2px #fff,0 0 0 4px #36516d}
+.wizard-tabs--pin .wtab:focus-visible{outline:2px solid #146a9f;outline-offset:1px}
+.wizard-tabs--pin .wtab-text{display:none}
+.wizard-tabs--pin .wtab-pin{
+  position:relative;isolation:isolate;display:grid;place-items:center;
+  width:48px;height:48px;padding-bottom:5px;color:var(--pin-text);font-size:1.13rem;font-variant-numeric:tabular-nums
+}
+.wizard-tabs--pin .wtab-pin::before{
+  content:"";position:absolute;z-index:-1;top:4px;left:5px;width:38px;height:38px;
+  border:1px solid var(--pin-border);border-radius:50% 50% 3px 50%;
+  background:var(--pin-fill);transform:rotate(45deg)
+}
+.wizard-tabs--pin .wtab-pin-caption{display:block;font-size:.74rem;line-height:1.15}
+.wizard-tabs--pin .wtab-endpoint .wtab-pin::before{border-radius:50%;transform:none}
+.wizard-tabs--pin .wtab-start .wtab-pin{--pin-fill:#26784b;--pin-border:#26784b;--pin-text:#fff}
+.wizard-tabs--pin .wtab-end .wtab-pin{--pin-fill:#f7f9fc;--pin-border:#9aaabd;--pin-text:#23374c}
+.wtab-endpoint-status{position:absolute;top:1px;right:0;font-size:.62rem;line-height:1}
 </style>
 </head>
 <body>
-<header><div class="wrap"><h1>🚚 Q TRIP LOG GPS <span style="font-size:.53em;font-weight:650;opacity:.9;white-space:nowrap">V1.18</span></h1><p>บันทึกเป็นฟอร์มทีละจุด · GPS · เวลา · ระยะทาง · ความเร็วเฉลี่ย</p></div></header>
+<header><div class="wrap"><h1>🚚 Q TRIP LOG GPS <span style="font-size:.53em;font-weight:650;opacity:.9;white-space:nowrap">V1.21</span></h1><p>บันทึกเป็นฟอร์มทีละจุด · GPS · เวลา · ระยะทาง · ความเร็วเฉลี่ย</p></div></header>
 <main class="container">
 <section class="panel"><h2>ข้อมูลเที่ยวเดินทาง</h2><div class="grid"><div class="field"><label for="tripName">ชื่อเที่ยว / งาน</label><input id="tripName" placeholder="เช่น ศรีราชา → สมุทรสาคร"></div><div class="field"><label for="vehicle">ทะเบียนรถ / หมายเหตุ</label><input id="vehicle" placeholder="เช่น 71-7117"></div></div><p class="hint">บันทึกทีละจุดเหมือนแบบฟอร์ม เลขไมล์จุดเริ่มและจุดระหว่างทางต้องกรอกก่อนกดถัดไป ส่วนจุดสุดท้ายเว้นว่างได้ และเลขไมล์ต้องไม่น้อยกว่าจุดก่อนหน้า (เลขไมล์เท่ากันได้) กดย้อนกลับเพื่อแก้ไขได้เสมอ เวลาและพิกัด GPS ต้องอนุญาตให้ Safari ใช้ตำแหน่ง</p></section>
 <section class="panel" id="wizardPanel"><h2>ฟอร์มบันทึกการเดินทาง <span id="pointCount" class="hint"></span></h2>
-<div id="wizardTabs" class="wizard-tabs no-print" aria-label="เลือกจุดเดินทาง"></div><p class="hint no-print" style="margin:0 0 10px">🟢 บันทึก GPS แล้ว · 🟠 บันทึกข้อมูลแล้ว แต่ยังไม่มี GPS · ⚪ ยังไม่บันทึก · 🔵 กำลังจับ GPS</p>
+<div class="point-button-shape no-print">
+  <label for="pointButtonShape">รูปแบบปุ่มเลือกจุด</label>
+  <select id="pointButtonShape">
+    <option value="pin">รูปหมุด</option>
+    <option value="rectangle">สี่เหลี่ยม</option>
+  </select>
+</div>
+<div id="wizardTabs" class="wizard-tabs no-print" aria-label="เลือกจุดเดินทาง"></div><p class="hint no-print" style="margin:0 0 10px">🟢 บันทึก GPS แล้ว · 🟠 บันทึกข้อมูลแล้ว แต่ยังไม่มี GPS · ⚪ ยังไม่บันทึก</p>
 <div id="points"></div>
 <div class="wizard-nav no-print"><button id="prevPoint" class="btn q-prev">← ย้อนกลับ</button><button id="nextPoint" class="btn q-next">ถัดไป →</button><button id="addPoint" class="btn q-add">＋ เพิ่มจุดระหว่างทาง</button><button id="resetTrip" class="btn q-reset">↻ เริ่มเที่ยวใหม่</button></div>
 <div id="wizExtra" class="no-print q-extra"><button id="finishPoint" class="btn green">🏁 ไปจุดสิ้นสุด</button></div></section>
@@ -191,20 +241,57 @@ function checkForwardTo(target){
  return true;
 }
 function pointCompleted(p,i){return !!String(p.odo??'').trim()&&!odoProblem(i)&&(i===0?!!p.departure:i===trip.points.length-1?!!p.arrival:!!p.arrival&&(p.departure!==''||p.status==='passing'));}
+function canRetryPointGPS(point){
+ return point.lat==null||point.lon==null||pointSaveResults.get(point.id)?.type==='warning';
+}
 function renderPoints(){
  const ps=trip.points,i=activeIndex=Math.min(activeIndex,ps.length-1),p=ps[i],first=i===0,last=i===ps.length-1;
  $('pointCount').textContent=`${ps.length} จุด · กำลังแก้จุด ${i+1}`;
- $('wizardTabs').innerHTML=ps.map((x,j)=>{const pending=gpsInProgress.has(x.id),hasGPS=x.lat!=null&&x.lon!=null,recorded=!!(x.arrival||x.departure||x.status==='passing'||x.status==='stopped'||x.status==='resumed');const state=pending?'gps-pending':hasGPS?'gps-ok':recorded?'gps-missing':'';const symbol=pending?'🔵':hasGPS?'🟢':recorded?'🟠':'⚪';return `<button type="button" data-tab="${j}" class="wtab ${i===j?'active':''} ${pointCompleted(x,j)?'done':''} ${state}" title="${pending?'กำลังจับ GPS':hasGPS?'มีพิกัด GPS':recorded?'บันทึกข้อมูลแล้ว แต่ไม่มี GPS':'ยังไม่บันทึก'}">${symbol} ${j===0?'1 เริ่ม':j===ps.length-1?`${j+1} จบ`:`จุด ${j+1}`}</button>`;}).join('');
+ $('wizardTabs').innerHTML=ps.map((point,index)=>{
+  const hasGPS=point.lat!=null&&point.lon!=null;
+  const recorded=!!(point.arrival||point.departure||['passing','stopped','resumed'].includes(point.status));
+  const state=hasGPS?'gps-ok':recorded?'gps-missing':'';
+  const symbol=hasGPS?'🟢':recorded?'🟠':'⚪';
+  const status=hasGPS?'มีพิกัด GPS':recorded?'บันทึกข้อมูลแล้ว แต่ไม่มี GPS':'ยังไม่บันทึก';
+  const number=index+1;
+  const kind=index===0?'เริ่ม':number===ps.length?'จบ':'จุด';
+  const label=kind==='จุด'?`จุด ${number}`:`${number} ${kind}`;
+  const current=index===i;
+  const endpoint=index===0?'wtab-endpoint wtab-start':number===ps.length?'wtab-endpoint wtab-end':'';
+  const icon=index===0?'▶':number===ps.length?'🏁':number;
+  return `<button type="button" data-tab="${index}" class="wtab ${current?'active':''} ${pointCompleted(point,index)?'done':''} ${state} ${endpoint}" aria-current="${current?'step':'false'}" aria-label="${label} · ${status}" title="${status}">
+    <span class="wtab-text" aria-hidden="true">${symbol} ${label}</span>
+    <span class="wtab-pin" aria-hidden="true">${icon}${endpoint?`<span class="wtab-endpoint-status">${symbol}</span>`:''}</span>
+    <span class="wtab-pin-caption" aria-hidden="true">${kind}</span>
+  </button>`;
+ }).join('');
  const title=first?'จุดที่ 1 — เริ่มออกเดินทาง':last?`จุดที่ ${i+1} — สิ้นสุดเดินทาง`:`จุดที่ ${i+1} — ระหว่างทาง`;
  const tKey=first?'departure':'arrival';
- const extra=first?'<div class="wizard-note">กรอกเลขไมล์เริ่มต้น กดจับ GPS + เวลา แล้วกดถัดไป</div>':last?'<div class="wizard-note">จุดสุดท้ายกรอกเวลาถึงได้เลย · เลขไมล์ปลายทางไม่บังคับกรอก</div>':`<div class="wizard-actions no-print">
-  <button data-action="passing" class="btn ${p.status==='passing'?'primary':''}" ${p.status==='stopped'?'disabled':''}>${gpsInProgress.has(p.id)?'⏳ กำลังจับ GPS':p.status==='passing'&&p.lat!=null&&p.lon!=null?'✅ บันทึกแล้ว':'📍 บันทึกจุด'}</button>
-  <button data-action="stop" class="btn ${p.status==='stopped'?'red':''}" ${p.status==='stopped'||p.status==='resumed'?'disabled':''}>🅿️ จอดพัก</button>
-  <button data-action="resume" class="btn ${p.status==='stopped'?'green':''}" ${p.status!=='stopped'?'disabled':''}>🚚 เดินทางต่อ</button>
- </div><div class="wizard-feedback" id="pointFeedback">${p.status==='stopped'?'กำลังจอดพัก · เมื่อจะออกให้กด เดินทางต่อ':p.status==='resumed'?'ออกเดินทางต่อแล้ว · จอดพัก '+duration(minutes(p.arrival,p.departure)):p.status==='passing'?'บันทึกจุดผ่าน · ไม่นับเป็นการจอดพัก':'บันทึกเวลาถึงและเลขไมล์ แล้วเลือกการทำงานด้านบน'}</div>`;
+ const endpoint=first||last;
+ const pending=gpsInProgress.has(p.id);
+ const gpsBar=`<div class="gpsbar no-print">
+  ${endpoint?`<button type="button" class="btn green" data-action="${first?'gpsDeparture':'gpsArrival'}" ${pending?'disabled':''}>📍 จับพิกัดปัจจุบัน / เวลา</button>`:''}
+  <div class="gpsstatus">${esc(gpsInfo(p))}</div>
+ </div>`;
+ const extra=first?'<div class="wizard-note">กรอกเลขไมล์เริ่มต้น กด “จับพิกัดปัจจุบัน / เวลา” แล้วกดถัดไป</div>':last?'<div class="wizard-note">จุดสุดท้ายกรอกเวลาถึงได้เลย · เลขไมล์ปลายทางไม่บังคับกรอก</div>':`<div class="wizard-actions no-print">
+  <button type="button" data-action="passing" class="btn" ${pending||p.status==='stopped'?'disabled':''}>
+    <span class="action-icon" aria-hidden="true">${p.status==='passing'&&p.lat!=null&&p.lon!=null?'✅':'📍'}</span>
+    <span>บันทึกจุด</span>
+  </button>
+  <button type="button" data-action="stop" class="btn" ${pending||p.status==='resumed'||(p.status==='stopped'&&!canRetryPointGPS(p))?'disabled':''}>
+    <span class="action-icon" aria-hidden="true">🅿️</span><span>จอดพัก</span>
+  </button>
+  <button type="button" data-action="resume" class="btn" ${p.status!=='stopped'?'disabled':''}>
+    <span class="action-icon" aria-hidden="true">🚚</span><span>เดินทางต่อ</span>
+  </button>
+ </div>
+ <div class="wizard-action-help hint no-print">
+  <p>แค่ผ่าน <strong>กดบันทึกจุดครั้งเดียว</strong> เพื่อเก็บพิกัดและเวลา</p>
+  <p>จอดจริง <strong>กดจอดพัก</strong> แล้วกด <strong>เดินทางต่อ</strong> ตอนออก</p>
+ </div>${p.status?`<div class="wizard-feedback" id="pointFeedback">${p.status==='stopped'?'กำลังจอดพัก':p.status==='resumed'?'ออกเดินทางต่อแล้ว · จอดพัก '+duration(minutes(p.arrival,p.departure)):'บันทึกจุดผ่าน · ไม่นับเป็นการจอดพัก'}</div>`:''}`;
  $('points').innerHTML=`<div class="wizard-point point" data-i="${i}"><div class="wizard-top"><strong>${title}</strong><div class="wizard-title-actions"><span class="wizard-status">${pointCompleted(p,i)?'✓ มีข้อมูลแล้ว':'ยังไม่ครบ'}</span>${!first&&!last?'<button type="button" class="btn red wizard-delete no-print" data-action="deletePoint">🗑️ ลบจุดนี้</button>':''}</div></div>
  <div class="grid">${field('ชื่อสถานที่','name','text',p.name,'เช่น บ้าน / ด่านบางพระ','wide')}${field(last?'เลขไมล์รถ (กม.) — ไม่บังคับ':'เลขไมล์รถ (กม.) *','odo','number',p.odo,last?'เว้นว่างได้':'เช่น 385720','wide')}${field(first?'เวลาออกเดินทาง':last?'เวลาถึงปลายทาง':'เวลาถึงจุดนี้',tKey,'datetime-local',p[tKey])}${!first&&!last?field('เวลาออกจากจุดนี้','departure','datetime-local',p.departure):'<div class="field"><label>ประเภทจุด</label><div style="padding:13px;background:#edf3f9;border-radius:9px">'+(first?'เริ่มเดินทาง':'จุดสิ้นสุด')+'</div></div>'}</div><div id="odoValidation" class="odo-error" role="alert" aria-live="polite" hidden></div>
- <div class="gpsbar no-print"><button class="btn green" data-action="${first?'gpsDeparture':'gpsArrival'}">📍 จับพิกัดปัจจุบัน + เวลา</button><div class="gpsstatus">${esc(gpsInfo(p))}</div></div>${extra}${pointSaveResults.has(p.id)?`<div class="q-save-result ${pointSaveResults.get(p.id).type}" role="status" aria-live="polite">${esc(pointSaveResults.get(p.id).message)}</div>`:""}</div>`;
+ ${endpoint?gpsBar+extra:extra+gpsBar}${pointSaveResults.has(p.id)?`<div class="q-save-result ${pointSaveResults.get(p.id).type}" role="status" aria-live="polite">${esc(pointSaveResults.get(p.id).message)}</div>`:""}</div>`;
  $('prevPoint').disabled=i===0;
  $('nextPoint').textContent=last?'📊 จบเที่ยว / ดูสรุป':i===ps.length-2?'🏁 ถัดไป: จุดสิ้นสุด':'ถัดไป →';
  $('finishPoint').hidden=first||last;
@@ -250,12 +337,20 @@ $('points').addEventListener('click',e=>{const b=e.target.closest('[data-action]
  if(a==='gpsArrival'||a==='gpsDeparture'){captureGPS(i,a==='gpsArrival'?'arrival':'departure',b);return}
  if(a==='passing'){
   if(gpsInProgress.has(p.id))return;
+  if(p.status==='passing'&&canRetryPointGPS(p)){
+   savePointGPS(p.id,'passing');
+   return;
+  }
   const timestamp=now();p.arrival=timestamp;p.departure=timestamp;p.status='passing';
   persist();renderPoints();updateStats();
   savePointGPS(p.id,'passing');
   return;
  }else if(a==='stop'){
   if(gpsInProgress.has(p.id))return;
+  if(p.status==='stopped'){
+   if(canRetryPointGPS(p))savePointGPS(p.id,'stop');
+   return;
+  }
   if(!p.arrival)p.arrival=now();p.departure='';p.status='stopped';
   persist();renderPoints();updateStats();
   savePointGPS(p.id,'stop');return;
@@ -263,6 +358,17 @@ $('points').addEventListener('click',e=>{const b=e.target.closest('[data-action]
   if(p.status!=='stopped')return;p.departure=now();p.status='resumed';
  }
  renderPoints();updateStats();persist();});
+const pointButtonShape=$('pointButtonShape');
+const pointButtonShapeKey='q-trip-log-point-button-shape';
+function applyPointButtonShape(){
+ $('wizardTabs').classList.toggle('wizard-tabs--pin',pointButtonShape.value==='pin');
+}
+pointButtonShape.value=load(pointButtonShapeKey)==='rectangle'?'rectangle':'pin';
+applyPointButtonShape();
+pointButtonShape.addEventListener('change',()=>{
+ applyPointButtonShape();
+ try{localStorage.setItem(pointButtonShapeKey,JSON.stringify(pointButtonShape.value))}catch(e){}
+});
 $('wizardTabs').addEventListener('click',e=>{const tab=e.target.closest('[data-tab]');if(tab){const target=Number(tab.dataset.tab);if(target<=activeIndex||checkForwardTo(target))setActive(target)}});
 $('tripName').addEventListener('input',e=>{trip.name=e.target.value;persist()});$('vehicle').addEventListener('input',e=>{trip.vehicle=e.target.value;persist()});
 function insertMiddle(goTo=true){const index=trip.points.length-1;trip.points.splice(index,0,{id:uid(),name:'',arrival:'',departure:'',odo:'',status:''});if(goTo)setActive(index);else{renderPoints();}updateStats();persist()}
@@ -282,7 +388,7 @@ async function savePointGPS(pointId,kind){
  if(!p)return;
  gpsInProgress.add(pointId);
  const verb=kind==='stop'?'เวลาถึงจุดจอด':'เวลาถึงและเวลาออก';
- pointSaveResults.set(pointId,{type:'pending',message:'⏳ บันทึก'+verb+'ในเครื่องแล้ว · กำลังจับพิกัด GPS…'});
+ pointSaveResults.delete(pointId);
  renderPoints();
  try{
   const pos=await gpsPosition();
@@ -295,7 +401,7 @@ async function savePointGPS(pointId,kind){
  }catch(err){
   if(!trip.points.some(x=>x===p))return;
   const oldGps=p.lat!=null&&p.lon!=null;
-  pointSaveResults.set(pointId,{type:'warning',message:'⚠️ บันทึก'+verb+'ในเครื่องแล้ว แต่จับ GPS ไม่สำเร็จ\n'+gpsErrorText(err)+(oldGps?'\nพิกัดเดิมยังคงอยู่ (ไม่ได้อัปเดต)':'\nจุดนี้ยังไม่มีพิกัด GPS')+'\nกด “จับพิกัดปัจจุบัน + เวลา” เพื่อลองใหม่'});
+  pointSaveResults.set(pointId,{type:'warning',message:'⚠️ บันทึก'+verb+'ในเครื่องแล้ว แต่จับ GPS ไม่สำเร็จ\n'+gpsErrorText(err)+(oldGps?'\nพิกัดเดิมยังคงอยู่ (ไม่ได้อัปเดต)':'\nจุดนี้ยังไม่มีพิกัด GPS')+(kind==='stop'?'\nถ้ายังจอดอยู่ ให้กด “จอดพัก” เพื่อลองใหม่':'\nถ้ายังอยู่ที่จุดนี้ ให้กด “บันทึกจุด” เพื่อลองใหม่')});
  }finally{
   gpsInProgress.delete(pointId);
   if(trip.points.some(x=>x===p))renderPoints();
@@ -310,7 +416,7 @@ async function captureGPS(index,mode,button){
  const point=trip.points[index];if(!point||gpsInProgress.has(point.id))return;
  const tappedAt=new Date();const id=point.id;
  gpsInProgress.add(id);
- pointSaveResults.set(id,{type:'pending',message:'⏳ กำลังจับ GPS… ข้อมูลเวลาที่บันทึกไว้จะไม่ถูกเปลี่ยน'});
+ pointSaveResults.delete(id);
  renderPoints();
  try{
   const pos=await gpsPosition();const p=trip.points.find(x=>x.id===id);
@@ -557,12 +663,12 @@ async function getReportCanvas(){
   if(!canvas.width||!canvas.height)throw Error('สร้างภาพรายงานไม่สำเร็จ');
   return canvas;
 }
-const filename=ext=>`Q_TRIP_LOG_${new Date().toISOString().slice(0,10)}_V1.18.${ext}`;
+const filename=ext=>`Q_TRIP_LOG_${new Date().toISOString().slice(0,10)}_V1.21.${ext}`;
 function downloadFile(file){const url=URL.createObjectURL(file);const a=document.createElement('a');a.href=url;a.download=file.name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),30000);}
 function shareFile(file){
   // Called immediately from the second direct tap, preserving Safari's user gesture.
   if(navigator.share&&navigator.canShare?.({files:[file]})){
-    return navigator.share({files:[file],title:'Q TRIP LOG GPS V1.18'}).then(()=> 'shared').catch(e=>{
+    return navigator.share({files:[file],title:'Q TRIP LOG GPS V1.21'}).then(()=> 'shared').catch(e=>{
       if(e.name==='AbortError')return 'cancelled';downloadFile(file);return 'downloaded';
     });
   }
